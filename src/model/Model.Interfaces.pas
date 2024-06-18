@@ -4,21 +4,25 @@ interface
 
 type
   IModelFuncionario = interface
-    ['{6BD57959-346E-420F-BAE7-E813B7B3F357}']
-    function Id(AValue: Integer): IModelFuncionario overload;
+    ['{DB0FD080-0369-4C82-984E-C2F4BB33BDFD}']
+    function Id(AValue: Integer): IModelFuncionario; overload;
     function Id: Integer; overload;
-    function Nome(AValue: string): IModelFuncionario overload;
+    function Nome(AValue: string): IModelFuncionario; overload;
     function Nome: string; overload;
-    function SobreNome(AValue: string): IModelFuncionario overload;
+    function SobreNome(AValue: string): IModelFuncionario; overload;
     function SobreNome: string; overload;
-    function EMail(AValue: string): IModelFuncionario overload;
+    function EMail(AValue: string): IModelFuncionario; overload;
     function EMail: string; overload;
-    function Celular(AValue: string): IModelFuncionario overload;
+    function Celular(AValue: string): IModelFuncionario; overload;
     function Celular: string; overload;
-    function Linkedin(AValue: string): IModelFuncionario overload;
+    function Linkedin(AValue: string): IModelFuncionario; overload;
     function Linkedin: string; overload;
-    function Github(AValue: string): IModelFuncionario overload;
+    function Github(AValue: string): IModelFuncionario; overload;
     function Github: string; overload;
+    function IdCargo(AValue: Integer): IModelFuncionario; overload;
+    function IdCargo: Integer; overload;
+    function DataAdmissao(AValue: TDateTime): IModelFuncionario; overload;
+    function DataAdmissao: TDateTime; overload;
 
     function Salvar: IModelFuncionario;
     function ListarTodos: IModelFuncionario;
@@ -28,12 +32,12 @@ type
   end;
 
   IModelEmpresa = interface
-    ['{2A5AA1BA-0CDE-4668-8EE9-DA79BFC868CF}']
-    function Id(AValue: Integer): IModelEmpresa overload;
+    ['{920B84F8-DBA6-470D-BED5-B7FE036E99CE}']
+    function Id(AValue: Integer): IModelEmpresa; overload;
     function Id: Integer; overload;
-    function RazaoSocial(AValue: string): IModelEmpresa overload;
+    function RazaoSocial(AValue: string): IModelEmpresa; overload;
     function RazaoSocial: string; overload;
-    function CNPJ(AValue: string): IModelEmpresa overload;
+    function CNPJ(AValue: string): IModelEmpresa; overload;
     function CNPJ: string; overload;
 
     function Salvar: IModelEmpresa;
@@ -44,10 +48,10 @@ type
   end;
 
   IModelCargo = interface
-    ['{2A5AA1BA-0CDE-4668-8EE9-DA79BFC868CF}']
-    function Id(AValue: Integer): IModelCargo overload;
+    ['{289A1044-B3A2-461A-8D93-AC0D9C7F0B06}']
+    function Id(AValue: Integer): IModelCargo; overload;
     function Id: Integer; overload;
-    function Descricao(AValue: string): IModelCargo overload;
+    function Descricao(AValue: string): IModelCargo; overload;
     function Descricao: string; overload;
 
     function Salvar: IModelCargo;
@@ -58,15 +62,11 @@ type
   end;
 
   IModelVinculo = interface
-    ['{46B318FF-C6D0-4E9F-AAE2-4EC14C48D9E8}']
-    function IdEmpresa(AValue: Integer): IModelVinculo overload;
+    ['{C511A652-74DD-4B04-ABA8-76298BF91E7B}']
+    function IdEmpresa(AValue: Integer): IModelVinculo; overload;
     function IdEmpresa: Integer; overload;
-    function IdFuncionario(AValue: Integer): IModelVinculo overload;
+    function IdFuncionario(AValue: Integer): IModelVinculo; overload;
     function IdFuncionario: Integer; overload;
-    function IdCargo(AValue: Integer): IModelVinculo overload;
-    function IdCargo: Integer; overload;
-    function DataAdmissao(AValue: Date): IModelVinculo overload;
-    function DataAdmissao: Date; overload;
 
     function Adicionar: IModelVinculo;
     function Remover(AVinculo: IModelVinculo): IModelVinculo;

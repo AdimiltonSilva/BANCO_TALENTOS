@@ -3,7 +3,7 @@ unit Dao.Empresa;
 interface
 
 uses
-  System.SysUtils, System.Generics.Collections,
+  SysUtils,
   DB, FMTBcd, SqlExpr, Provider, DBClient, DBXpress,
   UntConexao, Model.Interfaces, Dao.Interfaces;
 
@@ -33,8 +33,8 @@ constructor TDAOEmpresa.Create(var ADataSource: TDataSource);
 begin
   FConexao := TConexao.Create;
 
-  FSQLQryEmpresa := TFDQuery.Create(nil);
-  FSQLQryEmpresa.Connection := FConexao.GetConexao;
+  FSQLQryEmpresa := TSQLQuery.Create(nil);
+  FSQLQryEmpresa.SQLConnection := FConexao.GetConexao;
   FDataSource := ADataSource;
   FDataSource.DataSet := TDataSet(FSQLQryEmpresa);
 end;
@@ -110,7 +110,7 @@ begin
     FSQLQryEmpresa.SQL.Add('   SET razao_social = :razao_social,');
     FSQLQryEmpresa.SQL.Add('       cnpj = :cnpj');
     FSQLQryEmpresa.SQL.Add('WHERE id = :idEmpresa');
-    FSQLQryEmpresa.ParamByName('razao_social').AsString := AEmpresa.Nome;
+    FSQLQryEmpresa.ParamByName('razao_social').AsString := AEmpresa.RazaoSocial;
     FSQLQryEmpresa.ParamByName('cnpj').AsString := AEmpresa.CNPJ;
     FSQLQryEmpresa.ParamByName('idEmpresa').AsInteger := AEmpresa.Id;
     FSQLQryEmpresa.ExecSQL;

@@ -3,21 +3,14 @@ unit Dao.Funcionario;
 interface
 
 uses
-  System.SysUtils, System.Generics.Collections,
-
-  FireDAC.Stan.Intf, FireDAC.Stan.Option,
-  FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
-  FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.VCLUI.Wait,
-  Data.DB, FireDAC.Comp.Client, FireDAC.DApt,
-  FireDAC.Phys.FBDef, FireDAC.Phys.IBBase, FireDAC.Phys.FB,
-
+  SysUtils, SqlExpr, DB,
   UntConexao, Model.Interfaces, Dao.Interfaces;
 
 type
   TDAOFuncionario = class(TInterfacedObject, IDAOFuncionario)
     private
       FConexao: TConexao;
-      FDQryFuncionario: TFDQuery;
+      FSQLQryFuncionario: TSQLQuery;
       FDataSource: TDataSource;
     public
       constructor Create(var ADataSource: TDataSource);
@@ -39,10 +32,10 @@ constructor TDAOFuncionario.Create(var ADataSource: TDataSource);
 begin
   FConexao := TConexao.Create;
 
-  FDQryFuncionario := TFDQuery.Create(nil);
-  FDQryFuncionario.Connection := FConexao.GetConexao;
+  FSQLQryFuncionario := TSQLQuery.Create(nil);
+  FSQLQryFuncionario.SQLConnection := FConexao.GetConexao;
   FDataSource := ADataSource;
-  FDataSource.DataSet := TDataSet(FDQryFuncionario);
+  FDataSource.DataSet := TDataSet(FSQLQryFuncionario);
 end;
 
 destructor TDAOFuncionario.Destroy;
@@ -60,15 +53,15 @@ function TDAOFuncionario.BuscarPorId(AValue: Integer): IDAOFuncionario;
 begin
   Result := Self;
 
-  FDQryFuncionario.Close;
-  FDQryFuncionario.SQL.Clear;
-  FDQryFuncionario.SQL.Add('SELECT pf.id, pf.nome, pf.SobreNome');
-  FDQryFuncionario.SQL.Add('  FROM pfisica pf');
-  FDQryFuncionario.SQL.Add(' WHERE pf.id = :idFuncionario');
-  FDQryFuncionario.ParamByName('idFuncionario').AsInteger := AValue;
-  FDQryFuncionario.Open;
+  FSQLQryFuncionario.Close;
+  FSQLQryFuncionario.SQL.Clear;
+  FSQLQryFuncionario.SQL.Add('SELECT pf.id, pf.nome, pf.SobreNome');
+  FSQLQryFuncionario.SQL.Add('  FROM pfisica pf');
+  FSQLQryFuncionario.SQL.Add(' WHERE pf.id = :idFuncionario');
+  FSQLQryFuncionario.ParamByName('idFuncionario').AsInteger := AValue;
+  FSQLQryFuncionario.Open;
 
-  if FDQryFuncionario.IsEmpty then
+  if FSQLQryFuncionario.IsEmpty then
     raise Exception.Create('Pessoa F�sica n�o existe');
 end;
 
@@ -77,12 +70,12 @@ begin
   Result := Self;
 
   try
-    FDQryFuncionario.Close;
-    FDQryFuncionario.SQL.Clear;
-    FDQryFuncionario.SQL.Add('SELECT pf.id, pf.nome, pf.SobreNome');
-    FDQryFuncionario.SQL.Add('  FROM pfisica pf');
-    FDQryFuncionario.SQL.Add(' ORDER BY pf.id');
-    FDQryFuncionario.Open;
+    FSQLQryFuncionario.Close;
+    FSQLQryFuncionario.SQL.Clear;
+    FSQLQryFuncionario.SQL.Add('SELECT pf.id, pf.nome, pf.SobreNome');
+    FSQLQryFuncionario.SQL.Add('  FROM pfisica pf');
+    FSQLQryFuncionario.SQL.Add(' ORDER BY pf.id');
+    FSQLQryFuncionario.Open;
   except on E: Exception do
     raise Exception.Create('Error ao listar: ' + E.Message);
   end;
@@ -93,13 +86,13 @@ begin
   Result := Self;
 
   try
-    FDQryFuncionario.Close;
-    FDQryFuncionario.SQL.Clear;
-    FDQryFuncionario.SQL.Add('INSERT INTO pfisica (nome, SobreNome)');
-    FDQryFuncionario.SQL.Add('             VALUES (:nome, :SobreNome)');
-    FDQryFuncionario.ParamByName('nome').AsString := AFuncionario.Nome;
-    FDQryFuncionario.ParamByName('SobreNome').AsString := AFuncionario.SobreNome;
-    FDQryFuncionario.ExecSQL;
+    FSQLQryFuncionario.Close;
+    FSQLQryFuncionario.SQL.Clear;
+    FSQLQryFuncionario.SQL.Add('INSERT INTO pfisica (nome, SobreNome)');
+    FSQLQryFuncionario.SQL.Add('             VALUES (:nome, :SobreNome)');
+    FSQLQryFuncionario.ParamByName('nome').AsString := AFuncionario.Nome;
+    FSQLQryFuncionario.ParamByName('SobreNome').AsString := AFuncionario.SobreNome;
+    FSQLQryFuncionario.ExecSQL;
   except on E: Exception do
     raise Exception.Create('Error ao inserir: ' + E.Message);
   end;
@@ -110,16 +103,16 @@ begin
   Result := Self;
 
   try
-    FDQryFuncionario.Close;
-    FDQryFuncionario.SQL.Clear;
-    FDQryFuncionario.SQL.Add('UPDATE pfisica ');
-    FDQryFuncionario.SQL.Add('   SET nome = :nome, ');
-    FDQryFuncionario.SQL.Add('        SobreNome = :SobreNome ');
-    FDQryFuncionario.SQL.Add(' WHERE id = :id');
-    FDQryFuncionario.ParamByName('nome').AsString := AFuncionario.Nome;
-    FDQryFuncionario.ParamByName('SobreNome').AsString := AFuncionario.SobreNome;
-    FDQryFuncionario.ParamByName('id').AsInteger := AFuncionario.Id;
-    FDQryFuncionario.ExecSQL;
+    FSQLQryFuncionario.Close;
+    FSQLQryFuncionario.SQL.Clear;
+    FSQLQryFuncionario.SQL.Add('UPDATE pfisica ');
+    FSQLQryFuncionario.SQL.Add('   SET nome = :nome, ');
+    FSQLQryFuncionario.SQL.Add('        SobreNome = :SobreNome ');
+    FSQLQryFuncionario.SQL.Add(' WHERE id = :id');
+    FSQLQryFuncionario.ParamByName('nome').AsString := AFuncionario.Nome;
+    FSQLQryFuncionario.ParamByName('SobreNome').AsString := AFuncionario.SobreNome;
+    FSQLQryFuncionario.ParamByName('id').AsInteger := AFuncionario.Id;
+    FSQLQryFuncionario.ExecSQL;
   except on E: Exception do
     raise Exception.Create('Error ao alterar: ' + E.Message);
   end;
@@ -130,12 +123,12 @@ begin
   Result := Self;
 
   try
-    FDQryFuncionario.Close;
-    FDQryFuncionario.SQL.Clear;
-    FDQryFuncionario.SQL.Add('DELETE FROM pfisica');
-    FDQryFuncionario.SQL.Add(' WHERE id = :id');
-    FDQryFuncionario.ParamByName('id').AsInteger := AValue;
-    FDQryFuncionario.ExecSQL;
+    FSQLQryFuncionario.Close;
+    FSQLQryFuncionario.SQL.Clear;
+    FSQLQryFuncionario.SQL.Add('DELETE FROM pfisica');
+    FSQLQryFuncionario.SQL.Add(' WHERE id = :id');
+    FSQLQryFuncionario.ParamByName('id').AsInteger := AValue;
+    FSQLQryFuncionario.ExecSQL;
   except on E: Exception do
     raise Exception.Create('Error ao alterar: ' + E.Message);
   end;

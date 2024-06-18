@@ -17,9 +17,9 @@ type
       destructor Destroy; override;
       class function New(var ADataSource: TDataSource): IModelVinculo;
 
-      function IdEmpresa(AValue: Integer): IModelVinculo overload;
+      function IdEmpresa(AValue: Integer): IModelVinculo; overload;
       function IdEmpresa: Integer; overload;
-      function IdFuncionario(AValue: Integer): IModelVinculo overload;
+      function IdFuncionario(AValue: Integer): IModelVinculo; overload;
       function IdFuncionario: Integer; overload;
 
       function Adicionar: IModelVinculo;

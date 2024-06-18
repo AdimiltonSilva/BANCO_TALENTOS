@@ -1,7 +1,7 @@
-program Crud01;
+program BancoTalentos;
 
 uses
-  Vcl.Forms,
+  Forms,
   View.Principal in 'src\view\View.Principal.pas' {FrmPrincipal},
   View.Modelo in 'src\view\View.Modelo.pas' {FrmCadastroPadrao},
   Model.Funcionario in 'src\model\Model.Funcionario.pas',
@@ -25,7 +25,6 @@ uses
 
 begin
   Application.Initialize;
-  Application.MainFormOnTaskbar := True;
   Application.CreateForm(TFrmPrincipal, FrmPrincipal);
   Application.Run;
 end.

@@ -3,21 +3,14 @@ unit Dao.Vinculo;
 interface
 
 uses
-  System.SysUtils, System.Generics.Collections,
-
-  FireDAC.Stan.Intf, FireDAC.Stan.Option,
-  FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
-  FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.VCLUI.Wait,
-  Data.DB, FireDAC.Comp.Client, FireDAC.DApt,
-  FireDAC.Phys.FBDef, FireDAC.Phys.IBBase, FireDAC.Phys.FB,
-
+  SysUtils, SqlExpr, DB,
   UntConexao, Model.Interfaces, Dao.Interfaces;
 
 type
   TDAOVinculo = class(TInterfacedObject, IDAOVinculo)
     private
       FConexao: TConexao;
-      FDQryVinculo: TFDQuery;
+      FSQLQryVinculo: TSQLQuery;
       FDataSource: TDataSource;
     public
       constructor Create(var ADataSource: TDataSource);
@@ -38,10 +31,10 @@ constructor TDAOVinculo.Create(var ADataSource: TDataSource);
 begin
   FConexao := TConexao.Create;
 
-  FDQryVinculo := TFDQuery.Create(nil);
-  FDQryVinculo.Connection := FConexao.GetConexao;
+  FSQLQryVinculo := TSQLQuery.Create(nil);
+  FSQLQryVinculo.SQLConnection := FConexao.GetConexao;
   FDataSource := ADataSource;
-  FDataSource.DataSet := TDataSet(FDQryVinculo);
+  FDataSource.DataSet := TDataSet(FSQLQryVinculo);
 end;
 
 destructor TDAOVinculo.Destroy;
@@ -60,13 +53,13 @@ begin
   Result := Self;
 
   try
-    FDQryVinculo.Close;
-    FDQryVinculo.SQL.Clear;
-    FDQryVinculo.SQL.Add('INSERT INTO vinculo (id_pjuridica, id_pfisica)');
-    FDQryVinculo.SQL.Add('             VALUES (:idEmpresa, :idFuncionario)');
-    FDQryVinculo.ParamByName('idEmpresa').AsInteger := AVinculo.IdEmpresa;
-    FDQryVinculo.ParamByName('idFuncionario').AsInteger := AVinculo.IdFuncionario;
-    FDQryVinculo.ExecSQL;
+    FSQLQryVinculo.Close;
+    FSQLQryVinculo.SQL.Clear;
+    FSQLQryVinculo.SQL.Add('INSERT INTO vinculo (id_pjuridica, id_pfisica)');
+    FSQLQryVinculo.SQL.Add('             VALUES (:idEmpresa, :idFuncionario)');
+    FSQLQryVinculo.ParamByName('idEmpresa').AsInteger := AVinculo.IdEmpresa;
+    FSQLQryVinculo.ParamByName('idFuncionario').AsInteger := AVinculo.IdFuncionario;
+    FSQLQryVinculo.ExecSQL;
 
 
   except on E: Exception do
@@ -79,14 +72,14 @@ begin
   Result := Self;
 
   try
-    FDQryVinculo.Close;
-    FDQryVinculo.SQL.Clear;
-    FDQryVinculo.SQL.Add('DELETE FROM vinculo');
-    FDQryVinculo.SQL.Add(' WHERE id_pjuridica = :idEmpresa');
-    FDQryVinculo.SQL.Add('   AND id_pfisica = :idFuncionario');
-    FDQryVinculo.ParamByName('idEmpresa').AsInteger := AVinculo.IdEmpresa;
-    FDQryVinculo.ParamByName('idFuncionario').AsInteger := AVinculo.IdFuncionario;
-    FDQryVinculo.ExecSQL;
+    FSQLQryVinculo.Close;
+    FSQLQryVinculo.SQL.Clear;
+    FSQLQryVinculo.SQL.Add('DELETE FROM vinculo');
+    FSQLQryVinculo.SQL.Add(' WHERE id_pjuridica = :idEmpresa');
+    FSQLQryVinculo.SQL.Add('   AND id_pfisica = :idFuncionario');
+    FSQLQryVinculo.ParamByName('idEmpresa').AsInteger := AVinculo.IdEmpresa;
+    FSQLQryVinculo.ParamByName('idFuncionario').AsInteger := AVinculo.IdFuncionario;
+    FSQLQryVinculo.ExecSQL;
   except on E: Exception do
     raise Exception.Create('Error ao excluir um vinculo ' + E.Message);
   end;
@@ -97,16 +90,16 @@ begin
   Result := Self;
 
   try
-    FDQryVinculo.Close;
-    FDQryVinculo.SQL.Clear;
-    FDQryVinculo.SQL.Add('SELECT v.id_pjuridica, pj.nome AS pessoa_juridica,');
-    FDQryVinculo.SQL.Add('       v.id_pfisica, pf.nome AS pessoa_fisica');
-    FDQryVinculo.SQL.Add('  FROM vinculo v');
-    FDQryVinculo.SQL.Add(' INNER JOIN pjuridica pj ON v.id_pjuridica = pj.id');
-    FDQryVinculo.SQL.Add(' INNER JOIN pfisica pf ON v.id_pfisica = pf.id');
-    FDQryVinculo.SQL.Add(' WHERE v.id_pjuridica = :idEmpresa');
-    FDQryVinculo.ParamByName('idEmpresa').AsInteger := AValue;
-    FDQryVinculo.Open;
+    FSQLQryVinculo.Close;
+    FSQLQryVinculo.SQL.Clear;
+    FSQLQryVinculo.SQL.Add('SELECT v.id_pjuridica, pj.nome AS pessoa_juridica,');
+    FSQLQryVinculo.SQL.Add('       v.id_pfisica, pf.nome AS pessoa_fisica');
+    FSQLQryVinculo.SQL.Add('  FROM vinculo v');
+    FSQLQryVinculo.SQL.Add(' INNER JOIN pjuridica pj ON v.id_pjuridica = pj.id');
+    FSQLQryVinculo.SQL.Add(' INNER JOIN pfisica pf ON v.id_pfisica = pf.id');
+    FSQLQryVinculo.SQL.Add(' WHERE v.id_pjuridica = :idEmpresa');
+    FSQLQryVinculo.ParamByName('idEmpresa').AsInteger := AValue;
+    FSQLQryVinculo.Open;
   except on E: Exception do
     raise Exception.Create('Error ao listar ' + E.Message);
   end;
@@ -117,18 +110,18 @@ begin
   Result := Self;
 
   try
-    FDQryVinculo.Close;
-    FDQryVinculo.SQL.Clear;
-    FDQryVinculo.SQL.Add('SELECT v.id_pjuridica, pj.nome AS pessoa_juridica,');
-    FDQryVinculo.SQL.Add('       v.id_pfisica, pf.nome AS pessoa_fisica');
-    FDQryVinculo.SQL.Add('  FROM vinculo v');
-    FDQryVinculo.SQL.Add(' INNER JOIN pjuridica pj ON v.id_pjuridica = pj.id');
-    FDQryVinculo.SQL.Add(' INNER JOIN pfisica pf ON v.id_pfisica = pf.id');
-    FDQryVinculo.SQL.Add(' WHERE v.id_pjuridica = :idEmpresa');
-    FDQryVinculo.SQL.Add('   AND v.id_pfisica = :idFuncionario');
-    FDQryVinculo.ParamByName('idEmpresa').AsInteger := AVinculo.IdEmpresa;
-    FDQryVinculo.ParamByName('idFuncionario').AsInteger := AVinculo.IdFuncionario;
-    FDQryVinculo.Open;
+    FSQLQryVinculo.Close;
+    FSQLQryVinculo.SQL.Clear;
+    FSQLQryVinculo.SQL.Add('SELECT v.id_pjuridica, pj.nome AS pessoa_juridica,');
+    FSQLQryVinculo.SQL.Add('       v.id_pfisica, pf.nome AS pessoa_fisica');
+    FSQLQryVinculo.SQL.Add('  FROM vinculo v');
+    FSQLQryVinculo.SQL.Add(' INNER JOIN pjuridica pj ON v.id_pjuridica = pj.id');
+    FSQLQryVinculo.SQL.Add(' INNER JOIN pfisica pf ON v.id_pfisica = pf.id');
+    FSQLQryVinculo.SQL.Add(' WHERE v.id_pjuridica = :idEmpresa');
+    FSQLQryVinculo.SQL.Add('   AND v.id_pfisica = :idFuncionario');
+    FSQLQryVinculo.ParamByName('idEmpresa').AsInteger := AVinculo.IdEmpresa;
+    FSQLQryVinculo.ParamByName('idFuncionario').AsInteger := AVinculo.IdFuncionario;
+    FSQLQryVinculo.Open;
   except on E: Exception do
     raise Exception.Create('Error ao consultar v�nculo ' + E.Message);
   end;

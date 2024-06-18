@@ -2,7 +2,7 @@ unit Controller.Funcionario;
 
 interface
 
-uses System.SysUtils, System.Generics.Collections, FireDAC.Comp.Client,
+uses SysUtils,
      DB,
      Dao.Funcionario,
      Controller.Interfaces, Model.Interfaces, Model.Funcionario;
@@ -17,19 +17,19 @@ type
       destructor Destroy; override;
       class function New(var ADataSource: TDataSource): IControllerFuncionario;
 
-      function Id(AValue: Integer): IControllerFuncionario overload;
+      function Id(AValue: Integer): IControllerFuncionario; overload;
       function Id: integer; overload;
-      function Nome(AValue: string): IControllerFuncionario overload;
+      function Nome(AValue: string): IControllerFuncionario; overload;
       function Nome: string; overload;
-      function SobreNome(AValue: string): IControllerFuncionario overload;
+      function SobreNome(AValue: string): IControllerFuncionario; overload;
       function SobreNome: string; overload;
-      function Email(AValue: string): IControllerFuncionario overload;
+      function Email(AValue: string): IControllerFuncionario; overload;
       function Email: string; overload;
-      function Celular(AValue: string): IControllerFuncionario overload;
+      function Celular(AValue: string): IControllerFuncionario; overload;
       function Celular: string; overload;
-      function Linkedin(AValue: string): IControllerFuncionario overload;
+      function Linkedin(AValue: string): IControllerFuncionario; overload;
       function Linkedin: string; overload;
-      function Github(AValue: string): IControllerFuncionario overload;
+      function Github(AValue: string): IControllerFuncionario; overload;
       function Github: string; overload;
 
       function BuscaPorId(AValue: Integer): IControllerFuncionario;
@@ -40,6 +40,8 @@ type
   end;
 
 implementation
+
+uses Math;
 
 { TControllerFuncionario }
 
@@ -79,7 +81,7 @@ function TControllerFuncionario.Nome(AValue: string): IControllerFuncionario;
 begin
   Result := Self;
 
-  if AValue.IsEmpty then
+  if AValue = EmptyStr then
     raise Exception.Create('O Nome do funcionário não pode ser vazio.');
 
   FModelFuncionario.Nome(AValue);
@@ -94,7 +96,7 @@ function TControllerFuncionario.SobreNome(AValue: string): IControllerFuncionari
 begin
   Result := Self;
 
-  if AValue.IsEmpty then
+  if AValue = EmptyStr then
     raise Exception.Create('O Sobre Nome do funcionário não pode ser vazio.');
 
   FModelFuncionario.SobreNome(AValue);
@@ -109,7 +111,7 @@ function TControllerFuncionario.Email(AValue: string): IControllerFuncionario;
 begin
   Result := Self;
 
-  if AValue.IsEmpty then
+  if AValue = EmptyStr then
     raise Exception.Create('O e-mail do funcionário não pode ser vazio.');
 
   FModelFuncionario.Email(AValue);
@@ -124,7 +126,7 @@ function TControllerFuncionario.Celular(AValue: string): IControllerFuncionario;
 begin
   Result := Self;
 
-  if AValue.IsEmpty then
+  if AValue = EmptyStr then
     raise Exception.Create('O celular do funcionário não pode ser vazio.');
 
   FModelFuncionario.Celular(AValue);

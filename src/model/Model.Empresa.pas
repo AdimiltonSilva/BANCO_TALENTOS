@@ -17,11 +17,11 @@ type
       destructor Destroy; override;
       class function New(ADataSource: TDataSource): IModelEmpresa;
 
-      function Id(AValue: Integer): IModelEmpresa overload;
+      function Id(AValue: Integer): IModelEmpresa; overload;
       function Id: integer; overload;
-      function RazaoSocial(AValue: string): IModelEmpresa overload;
+      function RazaoSocial(AValue: string): IModelEmpresa; overload;
       function RazaoSocial: string; overload;
-      function CNPJ(AValue: string): IModelEmpresa overload;
+      function CNPJ(AValue: string): IModelEmpresa; overload;
       function CNPJ: string; overload;
 
       function Salvar: IModelEmpresa;

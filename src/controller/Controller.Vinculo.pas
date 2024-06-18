@@ -2,7 +2,7 @@ unit Controller.Vinculo;
 
 interface
 
-uses System.SysUtils, System.Generics.Collections, FireDAC.Comp.Client,
+uses SysUtils, 
      DB,
      Controller.Interfaces, Model.Interfaces,
      Model.Vinculo, Dao.Vinculo;

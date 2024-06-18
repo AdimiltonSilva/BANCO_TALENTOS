@@ -15,6 +15,8 @@ type
       FCelular: string;
       FLinkedin: string;
       FGithub: string;
+      FIdCargo: Integer;
+      FDataAdmissao: TDateTime;
       FDAOFuncionario: IDAOFuncionario;
       FDataSource: TDataSource;
     public
@@ -22,20 +24,25 @@ type
       destructor Destroy; override;
       class function New(var ADataSource: TDataSource): IModelFuncionario;
 
-      function Id(AValue: Integer): IModelFuncionario overload;
+      function Id(AValue: Integer): IModelFuncionario; overload;
       function Id: Integer; overload;
-      function Nome(AValue: string): IModelFuncionario overload;
+      function Nome(AValue: string): IModelFuncionario; overload;
       function Nome: string; overload;
-      function SobreNome(AValue: string): IModelFuncionario overload;
+      function SobreNome(AValue: string): IModelFuncionario; overload;
       function SobreNome: string; overload;
-      function Email(AValue: string): IModelFuncionario overload;
+      function Email(AValue: string): IModelFuncionario; overload;
       function Email: string; overload;
-      function Celular(AValue: string): IModelFuncionario overload;
+      function Celular(AValue: string): IModelFuncionario; overload;
       function Celular: string; overload;
-      function Linkedin(AValue: string): IModelFuncionario overload;
+      function Linkedin(AValue: string): IModelFuncionario; overload;
       function Linkedin: string; overload;
-      function Github(AValue: string): IModelFuncionario overload;
+      function Github(AValue: string): IModelFuncionario; overload;
       function Github: string; overload;
+      function IdCargo(AValue: Integer): IModelFuncionario; overload;
+      function IdCargo: Integer; overload;
+      function DataAdmissao(AValue: TDateTime): IModelFuncionario; overload;
+      function DataAdmissao: TDateTime; overload;
+
 
       function Salvar: IModelFuncionario;
       function ListarTodos: IModelFuncionario;
@@ -140,6 +147,28 @@ function TModelFuncionario.Github(AValue: string): IModelFuncionario;
 begin
   Result := Self;
   Self.FGithub := AValue;
+end;
+
+function TModelFuncionario.IdCargo: Integer;
+begin
+  Result := Self.FIdCargo;
+end;
+
+function TModelFuncionario.IdCargo(AValue: Integer): IModelFuncionario;
+begin
+  Result := Self;
+  Self.FIdCargo := AValue;
+end;
+
+function TModelFuncionario.DataAdmissao: TDateTime;
+begin
+   Result := Self.FDataAdmissao;
+end;
+
+function TModelFuncionario.DataAdmissao(AValue: TDateTime): IModelFuncionario;
+begin
+  Result := Self;
+  Self.FDataAdmissao := AValue;
 end;
 
 function TModelFuncionario.BuscarPorId(AValue: Integer): IModelFuncionario;

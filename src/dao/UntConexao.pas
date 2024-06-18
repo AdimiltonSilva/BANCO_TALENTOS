@@ -8,15 +8,14 @@ uses
 type
   TConexao = class
     private
-      FConn: TFDConnection;
-      FDPhysFBDriverLink: TFDPhysDriverLink;
+      FConn: TSQLConnection;
 
       procedure ConfigurarConexao;
     public
       constructor Create;
       destructor Destroy; override;
 
-      function GetConexao: TFDConnection;
+      function GetConexao: TSQLConnection;
   end;
 
   const
@@ -28,7 +27,7 @@ implementation
 
 constructor TConexao.Create;
 begin
-  FConn := TFDConnection.Create(nil);
+  FConn := TSQLConnection.Create(nil);
 
   ConfigurarConexao;
 
@@ -42,14 +41,14 @@ end;
 
 procedure TConexao.ConfigurarConexao;
 begin
-  FConn.Params.Database := BANCO_DADOS;
-  FConn.Params.DriverID := 'FB';
-  FConn.Params.UserName := 'sysdba';
-  FConn.Params.Password := 'masterkey';
+  FConn.DriverName := 'Firebird';
+  FConn.Params.Values['Database'] := BANCO_DADOS;
+  FConn.Params.Values['User_Name'] := 'sysdba';
+  FConn.Params.Values['Password'] := 'masterkey';
   FConn.LoginPrompt := False;
 end;
 
-function TConexao.GetConexao: TFDConnection;
+function TConexao.GetConexao: TSQLConnection;
 begin
   Result := FConn;
 end;

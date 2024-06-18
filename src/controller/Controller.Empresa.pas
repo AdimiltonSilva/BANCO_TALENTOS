@@ -2,7 +2,7 @@ unit Controller.Empresa;
 
 interface
 
-uses System.SysUtils, System.Generics.Collections, FireDAC.Comp.Client,
+uses SysUtils,
      DB,
      Controller.Interfaces, Model.Interfaces, Model.Empresa;
 
@@ -17,11 +17,11 @@ type
       destructor Destroy; override;
       class function New(ADataSource: TDataSource): IControllerEmpresa;
 
-      function Id(AValue: Integer): IControllerEmpresa overload;
+      function Id(AValue: Integer): IControllerEmpresa; overload;
       function Id: integer; overload;
-      function RazaoSocial(AValue: string): IControllerEmpresa overload;
+      function RazaoSocial(AValue: string): IControllerEmpresa; overload;
       function RazaoSocial: string; overload;
-      function CNPJ(AValue: string): IControllerEmpresa overload;
+      function CNPJ(AValue: string): IControllerEmpresa; overload;
       function CNPJ: string; overload;
 
       function BuscarPorId(AValue: Integer): IControllerEmpresa;
@@ -71,7 +71,7 @@ function TControllerEmpresa.RazaoSocial(AValue: String): IControllerEmpresa;
 begin
   Result := Self;
 
-  if AValue.IsEmpty then
+  if AValue = EmptyStr then
     raise Exception.Create('A Razão Social da Pessoa não pode ser vazia.');
 
   FModelEmpresa.RazaoSocial(Avalue);
@@ -86,7 +86,7 @@ function TControllerEmpresa.CNPJ(AValue: String): IControllerEmpresa;
 begin
   Result := Self;
 
-  if AValue.IsEmpty then
+  if AValue = EmptyStr then
     raise Exception.Create('O CNPJ não pode ser vazio.');
 
   FModelEmpresa.CNPJ(AValue);

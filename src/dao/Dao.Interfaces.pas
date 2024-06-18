@@ -7,7 +7,7 @@ uses
 
 type
   IDAOFuncionario = interface
-    ['{4BB2CDB8-4044-4A71-B545-F9564942A6BB}']
+    ['{1DE8098E-7EEB-46C6-B26B-DF71FFFF1821}']
     function BuscarPorId(AValue: Integer): IDAOFuncionario;
     function Salvar(AFuncionario: IModelFuncionario): IDAOFuncionario;
     function ListarTodos: IDAOFuncionario;
@@ -16,7 +16,7 @@ type
   end;
 
   IDAOEmpresa = interface
-    ['{839A1ED7-912F-4158-8104-840C0EE0FFC8}']
+    ['{9FB74186-3AA9-407D-8C5D-3C45DEC27D70}']
     function BuscarPorId(AValue: Integer): IDAOEmpresa;
     function Salvar(AEmpresa: IModelEmpresa): IDAOEmpresa;
     function ListarTodos: IDAOEmpresa;
@@ -25,7 +25,7 @@ type
   end;
 
   IDAOCargo = interface
-    ['{839A1ED7-912F-4158-8104-840C0EE0FFC8}']
+    ['{3DA2E67B-5E6A-475C-A626-CCFC8EC8A5C5}']
     function BuscarPorId(AValue: Integer): IDAOCargo;
     function Salvar(AEmpresa: IModelEmpresa): IDAOCargo;
     function ListarTodos: IDAOCargo;
@@ -34,7 +34,7 @@ type
   end;
 
   IDAOVinculo = interface
-    ['{C0E14600-134D-4D61-AD24-6EF3EBC39916}']
+    ['{FB8322C6-DCD7-472E-BEA6-2D1A99707728}']
     function Adicionar(AVinculo: IModelVinculo): IDAOVinculo;
     function Remover(AVinculo: IModelVinculo): IDAOVinculo;
     function ListarPorEmpresa(AValue: Integer): IDAOVinculo;
