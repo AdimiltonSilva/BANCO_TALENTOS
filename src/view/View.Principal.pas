@@ -18,6 +18,7 @@ type
     mniFornecedor: TMenuItem;
     mniSair: TMenuItem;
     actEmpresa: TAction;
+    Empresas1: TMenuItem;
     procedure actFuncionarioExecute(Sender: TObject);
     procedure actSairExecute(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
@@ -36,7 +37,7 @@ var
 implementation
 
 uses
-  View.Funcionario, View.Empresa;
+  View.Funcionario, View.Empresa, View.Cargo;
 
 
 {$R *.dfm}

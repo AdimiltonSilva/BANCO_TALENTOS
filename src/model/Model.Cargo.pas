@@ -16,9 +16,9 @@ type
       destructor Destroy; override;
       class function New(ADataSource: TDataSource): IModelCargo;
 
-      function Id(AValue: Integer): IModelCargo overload;
+      function Id(AValue: Integer): IModelCargo; overload;
       function Id: integer; overload;
-      function Descricao(AValue: string): IModelCargo overload;
+      function Descricao(AValue: string): IModelCargo; overload;
       function Descricao: string; overload;
 
       function Salvar: IModelCargo;

@@ -27,9 +27,9 @@ type
   IDAOCargo = interface
     ['{3DA2E67B-5E6A-475C-A626-CCFC8EC8A5C5}']
     function BuscarPorId(AValue: Integer): IDAOCargo;
-    function Salvar(AEmpresa: IModelEmpresa): IDAOCargo;
+    function Salvar(ACargo: IModelCargo): IDAOCargo;
     function ListarTodos: IDAOCargo;
-    function Alterar(AEmpresa: IModelEmpresa): IDAOCargo;
+    function Alterar(ACargo: IModelCargo): IDAOCargo;
     function Excluir(AValue: Integer): IDAOCargo;
   end;
 

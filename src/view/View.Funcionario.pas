@@ -9,18 +9,30 @@ uses
   Graphics, Controls, Forms, Dialogs, View.Modelo, StdCtrls,
   ComCtrls, ExtCtrls, DB, DBCtrls, Grids, DBGrids,
 
-  Controller.Interfaces, Controller.Funcionario;
+  Controller.Interfaces, Controller.Funcionario, dblookup;
 
 type
   TFrmCadastroFuncionario = class(TFrmCadastroPadrao)
-    lblDesc: TLabel;
+    lblNome: TLabel;
     lblCodigo: TLabel;
     edtId: TEdit;
     edtNome: TEdit;
     lblSobreNome: TLabel;
+    edtEmail: TEdit;
     edtSobreNome: TEdit;
-    procedure btnIncluirClick(Sender: TObject);
+    EMail: TLabel;
+    lblCelular: TLabel;
+    edtCelular: TEdit;
+    lblLinkedIn: TLabel;
+    edtLinkedIn: TEdit;
+    lblGitHub: TLabel;
+    edtGitHub: TEdit;
+    lblCargo: TLabel;
+    lblEmpresa: TLabel;
+    DBLookupCombo1: TDBLookupCombo;
+    DBLookupCombo2: TDBLookupCombo;
     procedure FormCreate(Sender: TObject);
+    procedure btnIncluirClick(Sender: TObject);
     procedure btnSalvarClick(Sender: TObject);
     procedure btnPesquisarClick(Sender: TObject);
     procedure btnAlterarClick(Sender: TObject);

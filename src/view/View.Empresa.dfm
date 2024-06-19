@@ -1,11 +1,11 @@
 inherited FrmCadastroEmpresa: TFrmCadastroEmpresa
-  Caption = 'Cadastro Pessoa Jur'#237'dica'
+  Caption = 'Cadastro de Empresas'
   OldCreateOrder = True
   PixelsPerInch = 96
   TextHeight = 13
   inherited pnlcontainer: TPanel
     inherited pgcMain: TPageControl
-      ActivePage = tsEdit
+      ActivePage = tsVinculo
       inherited tsConsulta: TTabSheet
         inherited pnlMainConsultar: TPanel
           inherited pnlNavegador: TPanel
@@ -24,12 +24,12 @@ inherited FrmCadastroEmpresa: TFrmCadastroEmpresa
             Height = 13
             Caption = 'ID'
           end
-          object lblNome: TLabel
+          object lblRazaoSocial: TLabel
             Left = 10
             Top = 60
-            Width = 27
+            Width = 60
             Height = 13
-            Caption = 'Nome'
+            Caption = 'Raz'#227'o Social'
           end
           object lblCNPJ: TLabel
             Left = 10
@@ -37,62 +37,6 @@ inherited FrmCadastroEmpresa: TFrmCadastroEmpresa
             Width = 25
             Height = 13
             Caption = 'CNPJ'
-          end
-          object lblEndereco: TLabel
-            Left = 10
-            Top = 152
-            Width = 45
-            Height = 13
-            Caption = 'Endere'#231'o'
-          end
-          object lblBairro: TLabel
-            Left = 10
-            Top = 198
-            Width = 28
-            Height = 13
-            Caption = 'Bairro'
-          end
-          object lblCidade: TLabel
-            Left = 246
-            Top = 198
-            Width = 33
-            Height = 13
-            Caption = 'Cidade'
-          end
-          object lblUF: TLabel
-            Left = 10
-            Top = 244
-            Width = 13
-            Height = 13
-            Caption = 'UF'
-          end
-          object lblCep: TLabel
-            Left = 246
-            Top = 244
-            Width = 19
-            Height = 13
-            Caption = 'Cep'
-          end
-          object lblEmail: TLabel
-            Left = 10
-            Top = 290
-            Width = 24
-            Height = 13
-            Caption = 'Email'
-          end
-          object lblTelefone: TLabel
-            Left = 10
-            Top = 336
-            Width = 42
-            Height = 13
-            Caption = 'Telefone'
-          end
-          object lblCelular: TLabel
-            Left = 246
-            Top = 336
-            Width = 33
-            Height = 13
-            Caption = 'Celular'
           end
           object edtID: TEdit
             Left = 10
@@ -115,67 +59,6 @@ inherited FrmCadastroEmpresa: TFrmCadastroEmpresa
             Width = 167
             Height = 21
             TabOrder = 2
-          end
-          object edtEndereco: TEdit
-            Left = 10
-            Top = 168
-            Width = 466
-            Height = 21
-            CharCase = ecUpperCase
-            TabOrder = 3
-          end
-          object edtBairro: TEdit
-            Left = 10
-            Top = 214
-            Width = 230
-            Height = 21
-            CharCase = ecUpperCase
-            TabOrder = 4
-          end
-          object edtCidade: TEdit
-            Left = 246
-            Top = 214
-            Width = 230
-            Height = 21
-            CharCase = ecUpperCase
-            TabOrder = 5
-          end
-          object edtUF: TEdit
-            Left = 10
-            Top = 260
-            Width = 34
-            Height = 21
-            CharCase = ecUpperCase
-            TabOrder = 6
-          end
-          object edtCep: TEdit
-            Left = 246
-            Top = 260
-            Width = 121
-            Height = 21
-            TabOrder = 7
-          end
-          object edtEmail: TEdit
-            Left = 10
-            Top = 306
-            Width = 466
-            Height = 21
-            CharCase = ecLowerCase
-            TabOrder = 8
-          end
-          object edtTelefone: TEdit
-            Left = 10
-            Top = 352
-            Width = 100
-            Height = 21
-            TabOrder = 9
-          end
-          object edtCelular: TEdit
-            Left = 246
-            Top = 352
-            Width = 100
-            Height = 21
-            TabOrder = 10
           end
         end
       end
@@ -200,24 +83,24 @@ inherited FrmCadastroEmpresa: TFrmCadastroEmpresa
             DesignSize = (
               496
               75)
-            object Label1: TLabel
+            object lblEmpresa: TLabel
               Left = 10
               Top = 10
-              Width = 46
+              Width = 41
               Height = 13
-              Caption = 'P.Jur'#237'dica'
+              Caption = 'Empresa'
             end
-            object Label2: TLabel
+            object lblFuncionario: TLabel
               Left = 10
               Top = 42
-              Width = 39
+              Width = 55
               Height = 13
-              Caption = 'P. F'#237'sica'
+              Caption = 'Funcion'#225'rio'
             end
             object edtIdEmpresa: TEdit
-              Left = 60
+              Left = 72
               Top = 8
-              Width = 58
+              Width = 46
               Height = 21
               Anchors = [akLeft, akTop, akRight]
               CharCase = ecUpperCase
@@ -245,9 +128,9 @@ inherited FrmCadastroEmpresa: TFrmCadastroEmpresa
               TabOrder = 1
             end
             object edtIdFuncionario: TEdit
-              Left = 60
+              Left = 72
               Top = 40
-              Width = 58
+              Width = 46
               Height = 21
               Anchors = [akLeft, akTop, akRight]
               CharCase = ecUpperCase

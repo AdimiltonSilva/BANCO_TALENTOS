@@ -47,11 +47,14 @@ object FrmPrincipal: TFrmPrincipal
     Top = 128
     object Cadastro: TMenuItem
       Caption = '&Cadastros'
+      object mniFornecedor: TMenuItem
+        Action = actCargo
+      end
       object mniCliente: TMenuItem
         Action = actFuncionario
       end
-      object mniFornecedor: TMenuItem
-        Action = actCargo
+      object Empresas1: TMenuItem
+        Action = actEmpresa
       end
     end
     object mniSair: TMenuItem

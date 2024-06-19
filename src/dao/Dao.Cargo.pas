@@ -3,7 +3,7 @@ unit Dao.Cargo;
 interface
 
 uses
-  System.SysUtils, System.Generics.Collections,
+  SysUtils, 
   DB, FMTBcd, SqlExpr, Provider, DBClient, DBXpress,
   UntConexao, Model.Interfaces, Dao.Interfaces;
 
@@ -33,8 +33,8 @@ constructor TDAOCargo.Create(var ADataSource: TDataSource);
 begin
   FConexao := TConexao.Create;
 
-  FSQLQryCargo := TFDQuery.Create(nil);
-  FSQLQryCargo.Connection := FConexao.GetConexao;
+  FSQLQryCargo := TSQLQuery.Create(nil);
+  FSQLQryCargo.SQLConnection := FConexao.GetConexao;
   FDataSource := ADataSource;
   FDataSource.DataSet := TDataSet(FSQLQryCargo);
 end;

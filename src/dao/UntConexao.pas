@@ -3,12 +3,16 @@ unit UntConexao;
 interface
 
 uses
-  DB, FMTBcd, SqlExpr, Provider, DBClient, DBXpress;
+  SysUtils, DB, FMTBcd, SqlExpr, DBClient, Provider;
 
 type
   TConexao = class
     private
       FConn: TSQLConnection;
+      FSQLQuery: TSQLQuery;
+      FDataSetProvider: TDataSetProvider;
+      FClientDataSet: TClientDataSet;
+      FDataSource: TDataSource;
 
       procedure ConfigurarConexao;
     public
@@ -19,7 +23,7 @@ type
   end;
 
   const
-    BANCO_DADOS = 'C:\Desen\Delphi\BancoDeTalentos\db\TALENTOS.FDB';
+    BANCO_DADOS = '127.0.0.1:C:\Desen\Delphi\BANCO_TALENTOS\db\TALENTOS.FDB';
 
 implementation
 
@@ -41,16 +45,53 @@ end;
 
 procedure TConexao.ConfigurarConexao;
 begin
-  FConn.DriverName := 'Firebird';
-  FConn.Params.Values['Database'] := BANCO_DADOS;
-  FConn.Params.Values['User_Name'] := 'sysdba';
-  FConn.Params.Values['Password'] := 'masterkey';
-  FConn.LoginPrompt := False;
+  with FConn do
+  begin
+    ConnectionName := 'IBConnection';
+    DriverName := 'Interbase';
+    GetDriverFunc := 'getSQLDriverINTERBASE';
+    LibraryName := 'dbexpint.dll';
+    LoginPrompt := False;
+    Params.Values['DriverName'] := 'Interbase';
+    Params.Values['Database'] := BANCO_DADOS;
+    Params.Values['RoleName'] := 'RoleName';
+    Params.Values['User_Name'] := 'SYSDBA';
+    Params.Values['Password'] := 'masterkey';
+    Params.Values['SQLDialect'] := '3';
+    Params.Values['LocaleCode'] := '0000';
+    Params.Values['BlobSize'] := '-1';
+    Params.Values['CommitRetain'] := 'False';
+    Params.Values['WaitOnLocks'] := 'True';
+    Params.Values['Interbase TransIsolation'] := 'ReadCommited';
+    Params.Values['Trim Char'] := 'False';
+    VendorLib := 'gds32.dll';
+  end;
+
+  FSQLQuery := TSQLQuery.Create(nil);
+  FSQLQuery.SQLConnection := FConn;
+
+  FDataSetProvider := TDataSetProvider.Create(nil);
+  FDataSetProvider.DataSet := FSQLQuery;
+
+  FClientDataSet := TClientDataSet.Create(nil);
+  FClientDataSet.SetProvider(FDataSetProvider);
+
+  FDataSource := TDataSource.Create(nil);
+  FDataSource.DataSet := FClientDataSet;
 end;
 
 function TConexao.GetConexao: TSQLConnection;
 begin
   Result := FConn;
+
+  try
+    FConn.Open;
+  except on E:Exception do
+    begin
+      raise Exception.Create('Falha na conexão com o banco de dados. ' + E.Message);
+      Exit;
+    end;
+  end;
 end;
 
 end.

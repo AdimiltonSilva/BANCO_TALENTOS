@@ -15,31 +15,15 @@ uses
 type
   TFrmCadastroEmpresa = class(TFrmCadastroPadrao)
     lblId: TLabel;
-    lblNome: TLabel;
+    lblRazaoSocial: TLabel;
     lblCNPJ: TLabel;
-    lblEndereco: TLabel;
-    lblBairro: TLabel;
-    lblCidade: TLabel;
-    lblUF: TLabel;
-    lblCep: TLabel;
-    lblEmail: TLabel;
-    lblTelefone: TLabel;
-    lblCelular: TLabel;
     edtID: TEdit;
     edtRazaoSocial: TEdit;
     edtCNPJ: TEdit;
-    edtEndereco: TEdit;
-    edtBairro: TEdit;
-    edtCidade: TEdit;
-    edtUF: TEdit;
-    edtCep: TEdit;
-    edtEmail: TEdit;
-    edtTelefone: TEdit;
-    edtCelular: TEdit;
     tsVinculo: TTabSheet;
     pnlVinculo: TPanel;
     pnlAdicionarVinculo: TPanel;
-    Label1: TLabel;
+    lblEmpresa: TLabel;
     edtIdEmpresa: TEdit;
     btnAdicionarVinculo: TButton;
     dbgVinculo: TDBGrid;
@@ -47,7 +31,7 @@ type
     dbnGridVinculo: TDBNavigator;
     edtNomeEmpresa: TEdit;
     edtIdFuncionario: TEdit;
-    Label2: TLabel;
+    lblFuncionario: TLabel;
     edtNomeFuncionario: TEdit;
     dsVinculo: TDataSource;
     btnRemoverVinculo: TButton;
@@ -65,9 +49,9 @@ type
     procedure btnExcluirClick(Sender: TObject);
   private
     { Private declarations }
-    FControllerEmpresa : IControllerEmpresa;
-    FControllerVinculo        : IControllerVinculo;
-    FControllerFuncionario   : IControllerFuncionario;
+    FControllerEmpresa: IControllerEmpresa;
+    FControllerVinculo: IControllerVinculo;
+    FControllerFuncionario: IControllerFuncionario;
     procedure HabilitarEditsVinculo(AValue: Boolean);
     procedure ConfigurarGrid;
     procedure ConfigurarGridVinculo;
@@ -87,6 +71,8 @@ uses
 
 procedure TFrmCadastroEmpresa.FormCreate(Sender: TObject);
 begin
+  inherited;
+  
   FControllerFuncionario := TControllerFuncionario.New(dsFuncionario);
 
   FControllerEmpresa := TControllerEmpresa.New(dsConsultar);
@@ -129,24 +115,15 @@ end;
 procedure TFrmCadastroEmpresa.ConfigurarGrid;
 begin
   dbgConsultar.Columns.Items[0].Width := 20;
-  dbgConsultar.Columns.Items[1].Width := 160;
+  dbgConsultar.Columns.Items[1].Width := 280;
   dbgConsultar.Columns.Items[2].Width := 80;
-  dbgConsultar.Columns.Items[3].Width := 200;
-  dbgConsultar.Columns.Items[4].Width := 100;
-  dbgConsultar.Columns.Items[5].Width := 100;
-  dbgConsultar.Columns.Items[6].Width := 20;
-  dbgConsultar.Columns.Items[7].Width := 40;
-  dbgConsultar.Columns.Items[8].Width := 100;
-  dbgConsultar.Columns.Items[9].Width := 80;
-  dbgConsultar.Columns.Items[10].Width := 80;
 end;
 
 procedure TFrmCadastroEmpresa.ConfigurarGridVinculo;
 begin
   dbgVinculo.Columns.Items[0].Width := 80;
-  dbgVinculo.Columns.Items[1].Width := 160;
+  dbgVinculo.Columns.Items[1].Width := 280;
   dbgVinculo.Columns.Items[2].Width := 80;
-  dbgVinculo.Columns.Items[3].Width := 160;
 end;
 
 procedure TFrmCadastroEmpresa.btnIncluirClick(Sender: TObject);

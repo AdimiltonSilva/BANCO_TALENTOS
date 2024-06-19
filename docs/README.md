@@ -34,7 +34,7 @@ https://www.linkedin.com/in/adimilton-antonio-89553522/
 
 3. **Cadastro de Funcionários**:
     - Deve conter os seguintes dados:
-      (Nome, Sobre Nome, E-mail, Celular, Linkedin, Github)
+      (Nome, Sobre Nome, E-mail, Celular, Linkedin, Github, Cargo, Empresa, DataAdmissao)
     - Adicionar um novo funcionário.
     - Editar um funcionário existente.
     - Excluir um funcionário.

@@ -19,7 +19,11 @@ uses
   Dao.Interfaces in 'src\dao\Dao.Interfaces.pas',
   View.Listagem in 'src\view\View.Listagem.pas' {FrmListagem},
   Dao.Vinculo in 'src\dao\Dao.Vinculo.pas',
-  Controller.Vinculo in 'src\controller\Controller.Vinculo.pas';
+  Controller.Vinculo in 'src\controller\Controller.Vinculo.pas',
+  View.Cargo in 'src\view\View.Cargo.pas' {FrmCadastroCargo},
+  Model.Cargo in 'src\model\Model.Cargo.pas',
+  Controller.Cargo in 'src\controller\Controller.Cargo.pas',
+  Dao.Cargo in 'src\dao\Dao.Cargo.pas';
 
 {$R *.res}
 

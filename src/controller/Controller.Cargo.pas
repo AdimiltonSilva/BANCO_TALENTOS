@@ -2,8 +2,7 @@ unit Controller.Cargo;
 
 interface
 
-uses System.SysUtils, System.Generics.Collections, FireDAC.Comp.Client,
-     DB,
+uses SysUtils, DB,
      Controller.Interfaces, Model.Interfaces, Model.Cargo;
 
 type
@@ -17,9 +16,9 @@ type
       destructor Destroy; override;
       class function New(ADataSource: TDataSource): IControllerCargo;
 
-      function Id(AValue: Integer): IControllerCargo overload;
+      function Id(AValue: Integer): IControllerCargo; overload;
       function Id: integer; overload;
-      function Descricao(AValue: string): IControllerCargo overload;
+      function Descricao(AValue: string): IControllerCargo; overload;
       function Descricao: string; overload;
 
       function BuscarPorId(AValue: Integer): IControllerCargo;
@@ -69,7 +68,7 @@ function TControllerCargo.Descricao(AValue: String): IControllerCargo;
 begin
   Result := Self;
 
-  if AValue.IsEmpty then
+  if AValue = EmptyStr then
     raise Exception.Create('A descrição do cargo não pode ser vazia.');
 
   FModelCargo.Descricao(Avalue);
