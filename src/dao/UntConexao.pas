@@ -13,7 +13,6 @@ type
       FDataSetProvider: TDataSetProvider;
       FClientDataSet: TClientDataSet;
       FDataSource: TDataSource;
-
       procedure ConfigurarConexao;
     public
       constructor Create;
@@ -23,7 +22,7 @@ type
   end;
 
   const
-    BANCO_DADOS = '127.0.0.1:C:\Desen\Delphi\BANCO_TALENTOS\db\TALENTOS.FDB';
+    BANCO_DADOS = '127.0.0.1:C:\Desen\Delphi\BANCO_TALENTOS\db\TESTE.FDB';
 
 implementation
 
@@ -88,7 +87,7 @@ begin
     FConn.Open;
   except on E:Exception do
     begin
-      raise Exception.Create('Falha na conexão com o banco de dados. ' + E.Message);
+      raise Exception.Create('Falha na conexão com o Banco de Dados. ' + E.Message);
       Exit;
     end;
   end;

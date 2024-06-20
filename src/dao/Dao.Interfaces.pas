@@ -37,10 +37,10 @@ type
     ['{FB8322C6-DCD7-472E-BEA6-2D1A99707728}']
     function Adicionar(AVinculo: IModelVinculo): IDAOVinculo;
     function Remover(AVinculo: IModelVinculo): IDAOVinculo;
-    function ListarPorEmpresa(AValue: Integer): IDAOVinculo;
+    function ListarVinculoPorFuncionario(AValue: Integer): IDAOVinculo;
     function ConsultarVinculo(AVinculo: IModelVinculo): IDAOVinculo;
   end;
-  
+
 implementation
 
 end.

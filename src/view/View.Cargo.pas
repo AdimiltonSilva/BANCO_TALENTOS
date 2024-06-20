@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, View.Modelo, DB, DBCtrls, Grids, DBGrids, StdCtrls, ComCtrls,
   ExtCtrls,
-  Controller.Interfaces, Controller.Cargo, DBXpress, SqlExpr;
+  Controller.Interfaces, Controller.Cargo;
 
 type
   TFrmCadastroCargo = class(TFrmCadastroPadrao)
@@ -40,14 +40,17 @@ begin
 
   FControllerCargo := TControllerCargo.New(dsConsultar);
   FControllerCargo.ListarTodos;
+
   ConfigurarGrid;
 end;
 
 procedure TFrmCadastroCargo.ConfigurarGrid;
 begin
-  dbgConsultar.Columns.Items[0].Width := 20;
-  dbgConsultar.Columns.Items[1].Width := 280;
-  dbgConsultar.Columns.Items[2].Width := 80;
+  if not (dsConsultar.DataSet.IsEmpty) then
+  begin
+    dbgConsultar.Columns.Items[0].Width := 40;
+    dbgConsultar.Columns.Items[1].Width := 280;
+  end;
 end;
 
 procedure TFrmCadastroCargo.btnIncluirClick(Sender: TObject);

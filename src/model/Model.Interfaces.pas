@@ -21,11 +21,14 @@ type
     function Github: string; overload;
     function IdCargo(AValue: Integer): IModelFuncionario; overload;
     function IdCargo: Integer; overload;
+    function IdEmpresa(AValue: Integer): IModelFuncionario; overload;
+    function IdEmpresa: Integer; overload;
     function DataAdmissao(AValue: TDateTime): IModelFuncionario; overload;
     function DataAdmissao: TDateTime; overload;
 
     function Salvar: IModelFuncionario;
     function ListarTodos: IModelFuncionario;
+    //function ListarEmpresaPorFuncionario(AValue: Integer): IModelFuncionario;
     function BuscarPorId(AValue: Integer) : IModelFuncionario;
     function Alterar: IModelFuncionario;
     function Excluir(AValue: Integer): IModelFuncionario;
@@ -63,14 +66,18 @@ type
 
   IModelVinculo = interface
     ['{C511A652-74DD-4B04-ABA8-76298BF91E7B}']
-    function IdEmpresa(AValue: Integer): IModelVinculo; overload;
-    function IdEmpresa: Integer; overload;
     function IdFuncionario(AValue: Integer): IModelVinculo; overload;
     function IdFuncionario: Integer; overload;
+    function IdCargo(AValue: Integer): IModelVinculo; overload;
+    function IdCargo: Integer; overload;
+    function IdEmpresa(AValue: Integer): IModelVinculo; overload;
+    function IdEmpresa: Integer; overload;
+    function DataAdmissao(AValue: TDateTime): IModelVinculo; overload;
+    function DataAdmissao: TDateTime; overload;
 
     function Adicionar: IModelVinculo;
     function Remover(AVinculo: IModelVinculo): IModelVinculo;
-    function ListarPorEmpresa(AValue: Integer): IModelVinculo;
+    function ListarVinculoPorFuncionario(AValue: Integer): IModelVinculo;
     function ConsultarVinculo(AVinculo: IModelVinculo): IModelVinculo;
   end;
 

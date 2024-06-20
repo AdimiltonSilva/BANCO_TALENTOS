@@ -3,7 +3,8 @@ unit Dao.Vinculo;
 interface
 
 uses
-  SysUtils, SqlExpr, DB,
+  SysUtils,
+  DB, FMTBcd, SqlExpr, Provider, DBClient, DBXpress,
   UntConexao, Model.Interfaces, Dao.Interfaces;
 
 type
@@ -19,7 +20,7 @@ type
 
       function Adicionar(AVinculo: IModelVinculo): IDAOVinculo;
       function Remover(AVinculo: IModelVinculo): IDAOVinculo;
-      function ListarPorEmpresa(AValue: Integer): IDAOVinculo;
+      function ListarVinculoPorFuncionario(AValue: Integer): IDAOVinculo;
       function ConsultarVinculo(AVinculo: IModelVinculo): IDAOVinculo;
   end;
   
@@ -55,15 +56,17 @@ begin
   try
     FSQLQryVinculo.Close;
     FSQLQryVinculo.SQL.Clear;
-    FSQLQryVinculo.SQL.Add('INSERT INTO vinculo (id_pjuridica, id_pfisica)');
-    FSQLQryVinculo.SQL.Add('             VALUES (:idEmpresa, :idFuncionario)');
+    FSQLQryVinculo.SQL.Add('INSERT INTO vinculo (id_funcionario, id_idcargo, id_empresa, data_admissao)');
+    FSQLQryVinculo.SQL.Add('             VALUES (:idFuncionario, :idCargo, :idEmpresa, :dataAdmissao)');
+    FSQLQryVinculo.ParamByName('idFuncionario').AsInteger := AVinculo.idFuncionario;
+    FSQLQryVinculo.ParamByName('idCargo').AsInteger := AVinculo.IdCargo;
     FSQLQryVinculo.ParamByName('idEmpresa').AsInteger := AVinculo.IdEmpresa;
-    FSQLQryVinculo.ParamByName('idFuncionario').AsInteger := AVinculo.IdFuncionario;
+    FSQLQryVinculo.ParamByName('dataAdmissao').AsDateTime := AVinculo.DataAdmissao;
     FSQLQryVinculo.ExecSQL;
 
 
   except on E: Exception do
-    raise Exception.Create('Error ao inserir ' + E.Message);
+    raise Exception.Create('Error ao inserir. ' + E.Message);
   end;
 end;
 
@@ -74,34 +77,39 @@ begin
   try
     FSQLQryVinculo.Close;
     FSQLQryVinculo.SQL.Clear;
-    FSQLQryVinculo.SQL.Add('DELETE FROM vinculo');
-    FSQLQryVinculo.SQL.Add(' WHERE id_pjuridica = :idEmpresa');
-    FSQLQryVinculo.SQL.Add('   AND id_pfisica = :idFuncionario');
+    FSQLQryVinculo.SQL.Add('DELETE FROM vinculo ');
+    FSQLQryVinculo.SQL.Add(' WHERE id_funcionario = :idFuncionario ');
+    FSQLQryVinculo.SQL.Add('   AND id_empresa = :idEmpresa');
+    FSQLQryVinculo.SQL.Add('   AND id_cargo = :idCargo');
+    FSQLQryVinculo.SQL.Add('   AND data_admissao = :dataAdmissao');
+    FSQLQryVinculo.ParamByName('idFuncionario').AsInteger := AVinculo.idFuncionario;
     FSQLQryVinculo.ParamByName('idEmpresa').AsInteger := AVinculo.IdEmpresa;
-    FSQLQryVinculo.ParamByName('idFuncionario').AsInteger := AVinculo.IdFuncionario;
+    FSQLQryVinculo.ParamByName('idCargo').AsInteger := AVinculo.IdCargo;
+    FSQLQryVinculo.ParamByName('dataAdmissao').AsDate := AVinculo.DataAdmissao;
     FSQLQryVinculo.ExecSQL;
   except on E: Exception do
-    raise Exception.Create('Error ao excluir um vinculo ' + E.Message);
+    raise Exception.Create('Error ao excluir um vinculo. ' + E.Message);
   end;
 end;
 
-function TDAOVinculo.ListarPorEmpresa(AValue: Integer): IDAOVinculo;
+function TDAOVinculo.ListarVinculoPorFuncionario(AValue: Integer): IDAOVinculo;
 begin
   Result := Self;
 
   try
     FSQLQryVinculo.Close;
     FSQLQryVinculo.SQL.Clear;
-    FSQLQryVinculo.SQL.Add('SELECT v.id_pjuridica, pj.nome AS pessoa_juridica,');
-    FSQLQryVinculo.SQL.Add('       v.id_pfisica, pf.nome AS pessoa_fisica');
+    FSQLQryVinculo.SQL.Add('SELECT v.id_empresa, e.razao_social, ');
+    FSQLQryVinculo.SQL.Add('       v.id_cargo, c.descricao AS cargo, ');
+    FSQLQryVinculo.SQL.Add('       v.data_admissao');
     FSQLQryVinculo.SQL.Add('  FROM vinculo v');
-    FSQLQryVinculo.SQL.Add(' INNER JOIN pjuridica pj ON v.id_pjuridica = pj.id');
-    FSQLQryVinculo.SQL.Add(' INNER JOIN pfisica pf ON v.id_pfisica = pf.id');
-    FSQLQryVinculo.SQL.Add(' WHERE v.id_pjuridica = :idEmpresa');
-    FSQLQryVinculo.ParamByName('idEmpresa').AsInteger := AValue;
+    FSQLQryVinculo.SQL.Add(' INNER JOIN cargo c ON v.id_cargo = c.id');
+    FSQLQryVinculo.SQL.Add(' INNER JOIN empresa e ON v.id_empresa = e.id');
+    FSQLQryVinculo.SQL.Add(' WHERE v.id_funcionario = :idFuncionario');
+    FSQLQryVinculo.ParamByName('idFuncionario').AsInteger := AValue;
     FSQLQryVinculo.Open;
   except on E: Exception do
-    raise Exception.Create('Error ao listar ' + E.Message);
+    raise Exception.Create('Error ao listar empresas por funcionário. ' + E.Message);
   end;
 end;
 
@@ -112,18 +120,19 @@ begin
   try
     FSQLQryVinculo.Close;
     FSQLQryVinculo.SQL.Clear;
-    FSQLQryVinculo.SQL.Add('SELECT v.id_pjuridica, pj.nome AS pessoa_juridica,');
-    FSQLQryVinculo.SQL.Add('       v.id_pfisica, pf.nome AS pessoa_fisica');
+    FSQLQryVinculo.SQL.Add('SELECT v.id_empresa, e.razao_social,');
+    FSQLQryVinculo.SQL.Add('       v.id_cargo, c.descricao AS cargo, ');
+    FSQLQryVinculo.SQL.Add('       v.data_admissao');
     FSQLQryVinculo.SQL.Add('  FROM vinculo v');
-    FSQLQryVinculo.SQL.Add(' INNER JOIN pjuridica pj ON v.id_pjuridica = pj.id');
-    FSQLQryVinculo.SQL.Add(' INNER JOIN pfisica pf ON v.id_pfisica = pf.id');
-    FSQLQryVinculo.SQL.Add(' WHERE v.id_pjuridica = :idEmpresa');
-    FSQLQryVinculo.SQL.Add('   AND v.id_pfisica = :idFuncionario');
+    FSQLQryVinculo.SQL.Add(' INNER JOIN pjuridica pj ON v.id_empresa = pj.id');
+    FSQLQryVinculo.SQL.Add(' INNER JOIN pfisica pf ON v.id_funcionario = pf.id');
+    FSQLQryVinculo.SQL.Add(' WHERE v.id_empresa = :idEmpresa');
+    FSQLQryVinculo.SQL.Add('   AND v.id_funcionario = :idFuncionario');
     FSQLQryVinculo.ParamByName('idEmpresa').AsInteger := AVinculo.IdEmpresa;
     FSQLQryVinculo.ParamByName('idFuncionario').AsInteger := AVinculo.IdFuncionario;
     FSQLQryVinculo.Open;
   except on E: Exception do
-    raise Exception.Create('Error ao consultar vï¿½nculo ' + E.Message);
+    raise Exception.Create('Error ao consultar vínculo ' + E.Message);
   end;
 end;
 

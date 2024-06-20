@@ -5,7 +5,7 @@ inherited FrmCadastroFuncionario: TFrmCadastroFuncionario
   TextHeight = 13
   inherited pnlcontainer: TPanel
     inherited pgcMain: TPageControl
-      ActivePage = tsEdit
+      ActivePage = tsVinculo
       inherited tsConsulta: TTabSheet
         inherited pnlMainConsultar: TPanel
           inherited pnlPesquisar: TPanel
@@ -38,10 +38,10 @@ inherited FrmCadastroFuncionario: TFrmCadastroFuncionario
           end
           object lblSobreNome: TLabel
             Left = 250
-            Top = 58
-            Width = 55
+            Top = 60
+            Width = 58
             Height = 13
-            Caption = 'SobreNome'
+            Caption = 'Sobre Nome'
           end
           object EMail: TLabel
             Left = 10
@@ -59,7 +59,7 @@ inherited FrmCadastroFuncionario: TFrmCadastroFuncionario
           end
           object lblLinkedIn: TLabel
             Left = 10
-            Top = 156
+            Top = 152
             Width = 40
             Height = 13
             Caption = 'LinkedIn'
@@ -70,20 +70,6 @@ inherited FrmCadastroFuncionario: TFrmCadastroFuncionario
             Width = 32
             Height = 13
             Caption = 'GitHub'
-          end
-          object lblCargo: TLabel
-            Left = 10
-            Top = 204
-            Width = 29
-            Height = 13
-            Caption = 'Cargo'
-          end
-          object lblEmpresa: TLabel
-            Left = 250
-            Top = 202
-            Width = 41
-            Height = 13
-            Caption = 'Empresa'
           end
           object edtId: TEdit
             Left = 10
@@ -104,11 +90,11 @@ inherited FrmCadastroFuncionario: TFrmCadastroFuncionario
           end
           object edtEmail: TEdit
             Left = 10
-            Top = 122
+            Top = 125
             Width = 230
             Height = 21
             CharCase = ecLowerCase
-            TabOrder = 2
+            TabOrder = 3
           end
           object edtSobreNome: TEdit
             Left = 250
@@ -116,11 +102,11 @@ inherited FrmCadastroFuncionario: TFrmCadastroFuncionario
             Width = 230
             Height = 21
             CharCase = ecUpperCase
-            TabOrder = 3
+            TabOrder = 2
           end
           object edtCelular: TEdit
             Left = 250
-            Top = 122
+            Top = 125
             Width = 120
             Height = 21
             CharCase = ecUpperCase
@@ -128,33 +114,191 @@ inherited FrmCadastroFuncionario: TFrmCadastroFuncionario
           end
           object edtLinkedIn: TEdit
             Left = 10
-            Top = 172
+            Top = 171
             Width = 230
             Height = 21
-            CharCase = ecUpperCase
             TabOrder = 5
           end
           object edtGitHub: TEdit
             Left = 250
-            Top = 172
+            Top = 171
             Width = 230
             Height = 21
-            CharCase = ecUpperCase
             TabOrder = 6
           end
-          object DBLookupCombo1: TDBLookupCombo
-            Left = 10
-            Top = 220
-            Width = 230
-            Height = 21
-            TabOrder = 7
+        end
+      end
+      object tsVinculo: TTabSheet
+        Caption = 'V'#237'nculo'
+        ImageIndex = 2
+        object Panel1: TPanel
+          Left = 0
+          Top = 0
+          Width = 496
+          Height = 410
+          Align = alClient
+          TabOrder = 0
+          object Panel2: TPanel
+            Left = 1
+            Top = 1
+            Width = 494
+            Height = 136
+            Align = alTop
+            BevelInner = bvLowered
+            TabOrder = 0
+            object lblCargo: TLabel
+              Left = 10
+              Top = 52
+              Width = 29
+              Height = 13
+              Caption = 'Cargo'
+            end
+            object SpeedButton1: TSpeedButton
+              Left = 70
+              Top = 67
+              Width = 23
+              Height = 22
+              Caption = '...'
+            end
+            object lblEmpresa: TLabel
+              Left = 10
+              Top = 91
+              Width = 41
+              Height = 13
+              Caption = 'Empresa'
+            end
+            object spbEmpresa: TSpeedButton
+              Left = 70
+              Top = 106
+              Width = 23
+              Height = 22
+              Caption = '...'
+            end
+            object lblDataAdmissao: TLabel
+              Left = 395
+              Top = 4
+              Width = 71
+              Height = 13
+              Caption = 'Data Admiss'#227'o'
+            end
+            object lblFuncionario: TLabel
+              Left = 10
+              Top = 10
+              Width = 55
+              Height = 13
+              Caption = 'Funcion'#225'rio'
+            end
+            object edtIdCargo: TEdit
+              Left = 10
+              Top = 68
+              Width = 60
+              Height = 21
+              CharCase = ecUpperCase
+              Enabled = False
+              TabOrder = 0
+            end
+            object edtCargo: TEdit
+              Left = 95
+              Top = 68
+              Width = 282
+              Height = 21
+              CharCase = ecUpperCase
+              Enabled = False
+              TabOrder = 1
+            end
+            object edtIdEmpresa: TEdit
+              Left = 10
+              Top = 107
+              Width = 60
+              Height = 21
+              CharCase = ecUpperCase
+              Enabled = False
+              TabOrder = 2
+            end
+            object edtEmpresa: TEdit
+              Left = 95
+              Top = 107
+              Width = 282
+              Height = 21
+              CharCase = ecUpperCase
+              Enabled = False
+              TabOrder = 3
+            end
+            object dtpDataAdmissao: TDateTimePicker
+              Left = 395
+              Top = 25
+              Width = 87
+              Height = 21
+              Date = 45462.925335532410000000
+              Time = 45462.925335532410000000
+              TabOrder = 4
+            end
+            object edtIdFuncionario: TEdit
+              Left = 10
+              Top = 25
+              Width = 80
+              Height = 21
+              CharCase = ecUpperCase
+              Enabled = False
+              TabOrder = 5
+            end
+            object Edit2: TEdit
+              Left = 95
+              Top = 25
+              Width = 285
+              Height = 21
+              CharCase = ecUpperCase
+              Enabled = False
+              TabOrder = 6
+            end
           end
-          object DBLookupCombo2: TDBLookupCombo
-            Left = 250
-            Top = 220
-            Width = 230
-            Height = 21
-            TabOrder = 8
+          object pnlNavegadorVinculo: TPanel
+            Left = 1
+            Top = 368
+            Width = 494
+            Height = 41
+            Align = alBottom
+            TabOrder = 1
+            object DBNavigator1: TDBNavigator
+              Left = 320
+              Top = 5
+              Width = 164
+              Height = 30
+              DataSource = dsVinculo
+              VisibleButtons = [nbFirst, nbPrior, nbNext, nbLast]
+              TabOrder = 0
+            end
+            object btnNovoVinculo: TButton
+              Left = 8
+              Top = 8
+              Width = 75
+              Height = 25
+              Caption = 'Novo'
+              TabOrder = 1
+            end
+            object btnSalvarVinculo: TButton
+              Left = 88
+              Top = 8
+              Width = 75
+              Height = 25
+              Caption = 'Salvar'
+              TabOrder = 2
+              OnClick = btnSalvarVinculoClick
+            end
+          end
+          object DBGrid1: TDBGrid
+            Left = 1
+            Top = 137
+            Width = 494
+            Height = 231
+            Align = alClient
+            DataSource = dsVinculo
+            TabOrder = 2
+            TitleFont.Charset = DEFAULT_CHARSET
+            TitleFont.Color = clWindowText
+            TitleFont.Height = -11
+            TitleFont.Name = 'Tahoma'
+            TitleFont.Style = []
           end
         end
       end
@@ -170,5 +314,11 @@ inherited FrmCadastroFuncionario: TFrmCadastroFuncionario
   end
   inherited dsConsultar: TDataSource
     OnDataChange = dsConsultarDataChange
+    Left = 432
+    Top = 192
+  end
+  object dsVinculo: TDataSource
+    Left = 444
+    Top = 347
   end
 end

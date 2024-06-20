@@ -35,6 +35,7 @@ begin
 
   FSQLQryCargo := TSQLQuery.Create(nil);
   FSQLQryCargo.SQLConnection := FConexao.GetConexao;
+
   FDataSource := ADataSource;
   FDataSource.DataSet := TDataSet(FSQLQryCargo);
 end;
@@ -51,7 +52,7 @@ end;
 
 function TDAOCargo.BuscarPorId(AValue: Integer): IDAOCargo;
 begin
-  Result := self;
+  Result := Self;
 
   try
     FSQLQryCargo.Close;
@@ -73,7 +74,7 @@ begin
   try
     FSQLQryCargo.Close;
     FSQLQryCargo.SQL.Clear;
-    FSQLQryCargo.SQL.Add('SELECT c.id, c.razao_social, c.cnpj');
+    FSQLQryCargo.SQL.Add('SELECT c.id, c.descricao');
     FSQLQryCargo.SQL.Add('  FROM cargos c');
     FSQLQryCargo.SQL.Add(' ORDER BY c.id');
     FSQLQryCargo.Open;

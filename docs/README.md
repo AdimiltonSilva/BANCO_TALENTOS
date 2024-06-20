@@ -34,15 +34,24 @@ https://www.linkedin.com/in/adimilton-antonio-89553522/
 
 3. **Cadastro de Funcionários**:
     - Deve conter os seguintes dados:
-      (Nome, Sobre Nome, E-mail, Celular, Linkedin, Github, Cargo, Empresa, DataAdmissao)
+      (Nome, Sobre Nome, E-mail, Celular, Linkedin, Github)
     - Adicionar um novo funcionário.
     - Editar um funcionário existente.
     - Excluir um funcionário.
     - Listar todos os funcionários.
     - Listar todos os funcionários por empresa.
-    - Associar um funcionário a uma empresa.
+    - Associar um funcionário a uma empresa (Vinculo).
 
-3. **Visualização**:
+4. **Vínculo de Funcionários a um Cargo e Empresa**:
+    - Deve conter os seguintes dados:
+      (IdFuncionario, IdCargo, IdEmpresa, DataAdmissao)
+    - Adicionar um novo vínculo "Associar um funcionário a uma empresa (Vinculo)".
+    - Editar um vínculo existente.
+    - Excluir um vínculo.
+    - Listar todos os vínculo.
+    - Listar todos os funcionários por empresa.
+
+5. **Visualização**:
     - Visualizar a lista de cargos.
     - Visualizar a lista de funcionários.
     - Visualizar a lista de funcionários e empresas vinculadas.
@@ -51,7 +60,7 @@ https://www.linkedin.com/in/adimilton-antonio-89553522/
 
 ### Requisitos Técnicos
 
-- O projeto deve ser desenvolvido em Delphi 7 ou superior.
+- O projeto deve ser desenvolvido em Delphi 7.
 - Utilizar um banco de dados relacional (Firebird).
 - Interface gráfica deve ser desenvolvida utilizando os componentes padrão do Delphi.
 - Implementar todas as operações CRUD para Cargos, Funcionários e Empresas.

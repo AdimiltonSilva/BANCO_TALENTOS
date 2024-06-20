@@ -16,6 +16,7 @@ type
       FLinkedin: string;
       FGithub: string;
       FIdCargo: Integer;
+      FIdEmpresa: Integer;
       FDataAdmissao: TDateTime;
       FDAOFuncionario: IDAOFuncionario;
       FDataSource: TDataSource;
@@ -40,9 +41,10 @@ type
       function Github: string; overload;
       function IdCargo(AValue: Integer): IModelFuncionario; overload;
       function IdCargo: Integer; overload;
+      function IdEmpresa(AValue: Integer): IModelFuncionario; overload;
+      function IdEmpresa: Integer; overload;
       function DataAdmissao(AValue: TDateTime): IModelFuncionario; overload;
       function DataAdmissao: TDateTime; overload;
-
 
       function Salvar: IModelFuncionario;
       function ListarTodos: IModelFuncionario;
@@ -158,6 +160,17 @@ function TModelFuncionario.IdCargo(AValue: Integer): IModelFuncionario;
 begin
   Result := Self;
   Self.FIdCargo := AValue;
+end;
+
+function TModelFuncionario.IdEmpresa: Integer;
+begin
+  Result := Self.FIdEmpresa;
+end;
+
+function TModelFuncionario.IdEmpresa(AValue: Integer): IModelFuncionario;
+begin
+  Result := Self;
+  Self.FIdEmpresa := AValue;
 end;
 
 function TModelFuncionario.DataAdmissao: TDateTime;

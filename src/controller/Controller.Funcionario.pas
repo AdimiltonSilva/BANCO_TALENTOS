@@ -31,6 +31,10 @@ type
       function Linkedin: string; overload;
       function Github(AValue: string): IControllerFuncionario; overload;
       function Github: string; overload;
+      function IdCargo(AValue: Integer): IControllerFuncionario; overload;
+      function IdCargo: Integer; overload;
+      function IdEmpresa(AValue: Integer): IControllerFuncionario; overload;
+      function IdEmpresa: Integer; overload;
 
       function BuscaPorId(AValue: Integer): IControllerFuncionario;
       function ListarTodos: IControllerFuncionario;
@@ -152,8 +156,29 @@ end;
 function TControllerFuncionario.Github(AValue: string): IControllerFuncionario;
 begin
   Result := Self;
-
   FModelFuncionario.Github(AValue);
+end;
+
+function TControllerFuncionario.IdCargo: Integer;
+begin
+  Result := FModelFuncionario.IdCargo;
+end;
+
+function TControllerFuncionario.IdCargo(AValue: Integer): IControllerFuncionario;
+begin
+  Result := Self;
+  FModelFuncionario.IdCargo(AValue);
+end;
+
+function TControllerFuncionario.IdEmpresa: Integer;
+begin
+  Result := FModelFuncionario.IdEmpresa;
+end;
+
+function TControllerFuncionario.IdEmpresa(AValue: Integer): IControllerFuncionario;
+begin
+  Result := Self;
+  FModelFuncionario.IdEmpresa(AValue);
 end;
 
 function TControllerFuncionario.Alterar: IControllerFuncionario;

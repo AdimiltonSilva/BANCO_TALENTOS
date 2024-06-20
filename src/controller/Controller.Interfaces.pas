@@ -22,6 +22,7 @@ type
 
     function BuscaPorId(AId: Integer): IControllerFuncionario;
     function ListarTodos: IControllerFuncionario;
+    //function ListarEmpresaPorFuncionario(AValue: Integer): IControllerFuncionario;
     function Salvar: IControllerFuncionario;
     function Alterar: IConTrollerFuncionario;
     function Excluir(AValue: Integer): IControllerFuncionario;
@@ -59,14 +60,18 @@ type
 
   IControllerVinculo = interface
     ['{29D86FC0-EE73-48CB-82D9-8A7AEA6D8D00}']
-    function IdEmpresa: Integer; overload;
-    function IdEmpresa(AValue: Integer): IControllerVinculo; overload;
     function IdFuncionario: Integer; overload;
     function IdFuncionario(AValue: Integer): IControllerVinculo; overload;
+    function IdCargo: Integer; overload;
+    function IdCargo(AValue: Integer): IControllerVinculo; overload;
+    function IdEmpresa: Integer; overload;
+    function IdEmpresa(AValue: Integer): IControllerVinculo; overload;
+    function DataAdmissao: TDateTime; overload;
+    function DataAdmissao(AValue: TDateTime): IControllerVinculo; overload;
 
     function Adicionar: IControllerVinculo;
     function Remover: IControllerVinculo;
-    function ListarPorEmpresa(AValue: Integer): IControllerVinculo;
+    function ListarVinculoPorFuncionario(AValue: Integer): IControllerVinculo;
     function ConsultarVinculo: IControllerVinculo;
   end;
 

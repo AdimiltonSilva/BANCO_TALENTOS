@@ -1,11 +1,12 @@
 inherited FrmCadastroCargo: TFrmCadastroCargo
+  Left = 390
+  Top = 215
   Caption = 'FrmCadastro de Cargos'
   OldCreateOrder = True
   PixelsPerInch = 96
   TextHeight = 13
   inherited pnlcontainer: TPanel
     inherited pgcMain: TPageControl
-      ActivePage = tsEdit
       inherited tsConsulta: TTabSheet
         inherited pnlMainConsultar: TPanel
           inherited pnlNavegador: TPanel

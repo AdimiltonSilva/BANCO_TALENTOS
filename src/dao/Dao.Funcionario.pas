@@ -20,6 +20,7 @@ type
       function BuscarPorId(AValue: Integer): IDAOFuncionario;
       function Salvar(AFuncionario: IModelFuncionario): IDAOFuncionario;
       function ListarTodos: IDAOFuncionario;
+      function ListarEmpresaPorFuncionario(AValue: Integer): IDAOFuncionario;
       function Alterar(AFuncionario: IModelFuncionario): IDAOFuncionario;
       function Excluir(AValue: Integer): IDAOFuncionario;
   end;
@@ -34,6 +35,7 @@ begin
 
   FSQLQryFuncionario := TSQLQuery.Create(nil);
   FSQLQryFuncionario.SQLConnection := FConexao.GetConexao;
+  
   FDataSource := ADataSource;
   FDataSource.DataSet := TDataSet(FSQLQryFuncionario);
 end;
@@ -55,14 +57,15 @@ begin
 
   FSQLQryFuncionario.Close;
   FSQLQryFuncionario.SQL.Clear;
-  FSQLQryFuncionario.SQL.Add('SELECT pf.id, pf.nome, pf.SobreNome');
-  FSQLQryFuncionario.SQL.Add('  FROM pfisica pf');
-  FSQLQryFuncionario.SQL.Add(' WHERE pf.id = :idFuncionario');
+  FSQLQryFuncionario.SQL.Add('SELECT f.id, f.nome, f.sobrenome, f.email, ');
+  FSQLQryFuncionario.SQL.Add('       f.celular, f.linkedin, f.github, f.dataadmissao ');
+  FSQLQryFuncionario.SQL.Add('  FROM funcionarios f');
+  FSQLQryFuncionario.SQL.Add(' WHERE f.id = :idFuncionario');
   FSQLQryFuncionario.ParamByName('idFuncionario').AsInteger := AValue;
   FSQLQryFuncionario.Open;
 
   if FSQLQryFuncionario.IsEmpty then
-    raise Exception.Create('Pessoa Fï¿½sica nï¿½o existe');
+    raise Exception.Create('Funcionário não existe');
 end;
 
 function TDAOFuncionario.ListarTodos: IDAOFuncionario;
@@ -72,9 +75,28 @@ begin
   try
     FSQLQryFuncionario.Close;
     FSQLQryFuncionario.SQL.Clear;
-    FSQLQryFuncionario.SQL.Add('SELECT pf.id, pf.nome, pf.SobreNome');
-    FSQLQryFuncionario.SQL.Add('  FROM pfisica pf');
+    FSQLQryFuncionario.SQL.Add('SELECT f.id, f.nome, f.sobrenome, f.email, ');
+    FSQLQryFuncionario.SQL.Add('       f.celular, f.linkedin, f.github, f.dataadmissao ');
+    FSQLQryFuncionario.SQL.Add('  FROM funcionarios f');
     FSQLQryFuncionario.SQL.Add(' ORDER BY pf.id');
+    FSQLQryFuncionario.Open;
+  except on E: Exception do
+    raise Exception.Create('Error ao listar: ' + E.Message);
+  end;
+end;
+
+function TDAOFuncionario.ListarEmpresaPorFuncionario(AValue: Integer): IDAOFuncionario;
+begin
+  Result := Self;
+
+  try
+    FSQLQryFuncionario.Close;
+    FSQLQryFuncionario.SQL.Clear;
+    FSQLQryFuncionario.SQL.Add('SELECT e.id, e.razao_social, e.cnpj ');
+    FSQLQryFuncionario.SQL.Add('  FROM empresas e');
+    FSQLQryFuncionario.SQL.Add(' WHERE e.id = :idFuncionario');
+    FSQLQryFuncionario.ParamByName('idFuncionario').AsInteger := AValue;
+    FSQLQryFuncionario.SQL.Add(' ORDER BY e.id');
     FSQLQryFuncionario.Open;
   except on E: Exception do
     raise Exception.Create('Error ao listar: ' + E.Message);
@@ -88,10 +110,20 @@ begin
   try
     FSQLQryFuncionario.Close;
     FSQLQryFuncionario.SQL.Clear;
-    FSQLQryFuncionario.SQL.Add('INSERT INTO pfisica (nome, SobreNome)');
-    FSQLQryFuncionario.SQL.Add('             VALUES (:nome, :SobreNome)');
+    FSQLQryFuncionario.SQL.Add('INSERT INTO funcionarios (nome, sobrenome, email, celular, ');
+    FSQLQryFuncionario.SQL.Add('                         linkedin, github, dataadmissao, ');
+    FSQLQryFuncionario.SQL.Add('                         idcargo, idempresa');
+    FSQLQryFuncionario.SQL.Add('                 VALUES (:nome, :SobreNome, :eMail, :celular, :LinkedIn, ');
+    FSQLQryFuncionario.SQL.Add('                         :GitHub, :idCargo, :idEmpresa, :dataAdmissao)');
     FSQLQryFuncionario.ParamByName('nome').AsString := AFuncionario.Nome;
     FSQLQryFuncionario.ParamByName('SobreNome').AsString := AFuncionario.SobreNome;
+    FSQLQryFuncionario.ParamByName('eMail').AsString := AFuncionario.SobreNome;
+    FSQLQryFuncionario.ParamByName('celular').AsString := AFuncionario.Celular;
+    FSQLQryFuncionario.ParamByName('LinkedIn').AsString := AFuncionario.Linkedin;
+    FSQLQryFuncionario.ParamByName('GitHub').AsString := AFuncionario.Github;
+    FSQLQryFuncionario.ParamByName('idCargo').AsInteger := AFuncionario.IdCargo;
+    FSQLQryFuncionario.ParamByName('idEmpresa').AsInteger := AFuncionario.IdEmpresa;
+    FSQLQryFuncionario.ParamByName('dataAdmissao').AsDate := AFuncionario.DataAdmissao;
     FSQLQryFuncionario.ExecSQL;
   except on E: Exception do
     raise Exception.Create('Error ao inserir: ' + E.Message);
@@ -105,12 +137,26 @@ begin
   try
     FSQLQryFuncionario.Close;
     FSQLQryFuncionario.SQL.Clear;
-    FSQLQryFuncionario.SQL.Add('UPDATE pfisica ');
+    FSQLQryFuncionario.SQL.Add('UPDATE funcionarios ');
     FSQLQryFuncionario.SQL.Add('   SET nome = :nome, ');
-    FSQLQryFuncionario.SQL.Add('        SobreNome = :SobreNome ');
+    FSQLQryFuncionario.SQL.Add('       SobreNome = :SobreNome, ');
+    FSQLQryFuncionario.SQL.Add('       email = :eMail, ');
+    FSQLQryFuncionario.SQL.Add('       celular = :celular, ');
+    FSQLQryFuncionario.SQL.Add('       linkedin = :LinkedIn, ');
+    FSQLQryFuncionario.SQL.Add('       github = :GitHub, ');
+    FSQLQryFuncionario.SQL.Add('       idcargo = :idCargo, ');
+    FSQLQryFuncionario.SQL.Add('       idempresa = :idEmpresa, ');
+    FSQLQryFuncionario.SQL.Add('       dataadmissao = :dataAdmissao ');
     FSQLQryFuncionario.SQL.Add(' WHERE id = :id');
     FSQLQryFuncionario.ParamByName('nome').AsString := AFuncionario.Nome;
     FSQLQryFuncionario.ParamByName('SobreNome').AsString := AFuncionario.SobreNome;
+    FSQLQryFuncionario.ParamByName('eMail').AsString := AFuncionario.SobreNome;
+    FSQLQryFuncionario.ParamByName('celular').AsString := AFuncionario.SobreNome;
+    FSQLQryFuncionario.ParamByName('LinkedIn').AsString := AFuncionario.SobreNome;
+    FSQLQryFuncionario.ParamByName('GitHub').AsString := AFuncionario.SobreNome;
+    FSQLQryFuncionario.ParamByName('SobreNome').AsString := AFuncionario.SobreNome;
+    FSQLQryFuncionario.ParamByName('id').AsInteger := AFuncionario.Id;
+    FSQLQryFuncionario.ParamByName('id').AsInteger := AFuncionario.Id;
     FSQLQryFuncionario.ParamByName('id').AsInteger := AFuncionario.Id;
     FSQLQryFuncionario.ExecSQL;
   except on E: Exception do
@@ -125,12 +171,12 @@ begin
   try
     FSQLQryFuncionario.Close;
     FSQLQryFuncionario.SQL.Clear;
-    FSQLQryFuncionario.SQL.Add('DELETE FROM pfisica');
+    FSQLQryFuncionario.SQL.Add('DELETE FROM funcionarios');
     FSQLQryFuncionario.SQL.Add(' WHERE id = :id');
     FSQLQryFuncionario.ParamByName('id').AsInteger := AValue;
     FSQLQryFuncionario.ExecSQL;
   except on E: Exception do
-    raise Exception.Create('Error ao alterar: ' + E.Message);
+    raise Exception.Create('Error ao excluir: ' + E.Message);
   end;
 end;
 
