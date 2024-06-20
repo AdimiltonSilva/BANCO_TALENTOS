@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics,
-  Controls, Forms, Dialogs, Menus, ActnList;
+  Controls, Forms, Dialogs, Menus, ActnList, MidasLib ;
 
 type
   TFrmPrincipal = class(TForm)

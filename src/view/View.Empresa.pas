@@ -18,8 +18,6 @@ type
     edtID: TEdit;
     edtRazaoSocial: TEdit;
     edtCNPJ: TEdit;
-    dsVinculo: TDataSource;
-    dsFuncionario: TDataSource;
     procedure btnSalvarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnIncluirClick(Sender: TObject);
@@ -27,6 +25,7 @@ type
     procedure dsConsultarDataChange(Sender: TObject; Field: TField);
     procedure btnImprimirClick(Sender: TObject);
     procedure btnExcluirClick(Sender: TObject);
+    procedure btnAlterarClick(Sender: TObject);
   private
     { Private declarations }
     FControllerEmpresa: IControllerEmpresa;
@@ -66,18 +65,20 @@ begin
   begin
     HabilitarBotoes(False);
 
-    edtId.Text := dsVinculo.DataSet.FieldByName('id').AsString;
-    edtRazaoSocial.Text := dsVinculo.DataSet.FieldByName('razao_social').AsString;
-    edtCNPJ.Text := dsVinculo.DataSet.FieldByName('cnpj').AsString;
-    edtId.SetFocus;
+    edtId.Text := dsConsultar.DataSet.FieldByName('id').AsString;
+    edtRazaoSocial.Text := dsConsultar.DataSet.FieldByName('razao_social').AsString;
+    edtCNPJ.Text := dsConsultar.DataSet.FieldByName('cnpj').AsString;
   end;
 end;
 
 procedure TFrmCadastroEmpresa.ConfigurarGrid;
 begin
-  dbgConsultar.Columns.Items[0].Width := 20;
-  dbgConsultar.Columns.Items[1].Width := 280;
-  dbgConsultar.Columns.Items[2].Width := 80;
+  if not (dsConsultar.DataSet.IsEmpty) then
+  begin
+    dbgConsultar.Columns.Items[0].Width := 40;
+    dbgConsultar.Columns.Items[1].Width := 300;
+    dbgConsultar.Columns.Items[2].Width := 110;
+  end;
 end;
 
 procedure TFrmCadastroEmpresa.btnIncluirClick(Sender: TObject);
@@ -86,6 +87,28 @@ begin
 
   edtID.Enabled := False;
   edtRazaoSocial.SetFocus;
+end;
+
+procedure TFrmCadastroEmpresa.btnAlterarClick(Sender: TObject);
+begin
+  inherited;
+
+  edtID.Enabled := False;
+  edtRazaoSocial.SetFocus;
+end;
+
+procedure TFrmCadastroEmpresa.btnExcluirClick(Sender: TObject);
+begin
+  if Application.MessageBox('Confirma Exclusão', 'Atenção !!!', MB_ICONQUESTION + MB_YESNO + MB_DEFBUTTON2) = mrYes then
+  begin
+    FControllerEmpresa
+      .Excluir(StrToIntDef(edtID.Text, 0))
+      .ListarTodos;
+
+    ConfigurarGrid;
+  end;
+
+  inherited;
 end;
 
 procedure TFrmCadastroEmpresa.btnSalvarClick(Sender: TObject);
@@ -105,26 +128,10 @@ begin
       .Alterar
       .ListarTodos;
 
+//  FControllerEmpresa
+//    .ListarTodos;
+
   ConfigurarGrid;
-
-  inherited;
-end;
-
-procedure TFrmCadastroEmpresa.btnExcluirClick(Sender: TObject);
-begin
-  if (dsVinculo.DataSet.IsEmpty) then
-  begin
-    if Application.MessageBox('Confirma Exclusão' , 'Atenção !!!', MB_ICONQUESTION + MB_YESNO + MB_DEFBUTTON2) = mrYes then
-    begin
-      FControllerEmpresa
-        .Excluir(StrToIntDef(edtID.Text, 0))
-        .ListarTodos;
-
-      ConfigurarGrid;
-    end;
-  end
-  else
-    Application.MessageBox('Esta empresa tem vínculos com fucnionários e não pode ser excluida', 'Atenção !!!', MB_ICONWARNING + MB_OK);
 
   inherited;
 end;
@@ -134,9 +141,9 @@ procedure TFrmCadastroEmpresa.dsConsultarDataChange(Sender: TObject;
 begin
   inherited;
 
-  edtId.Text          := dsConsultar.DataSet.FieldByName('id').AsString;
+  edtId.Text := dsConsultar.DataSet.FieldByName('id').AsString;
   edtRazaoSocial.Text := dsConsultar.DataSet.FieldByName('razao_social').AsString;
-  edtCNPJ.Text        := dsConsultar.DataSet.FieldByName('cnpj').AsString;
+  edtCNPJ.Text := dsConsultar.DataSet.FieldByName('cnpj').AsString;
 end;
 
 procedure TFrmCadastroEmpresa.btnImprimirClick(Sender: TObject);

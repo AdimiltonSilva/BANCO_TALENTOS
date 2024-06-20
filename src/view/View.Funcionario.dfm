@@ -129,7 +129,7 @@ inherited FrmCadastroFuncionario: TFrmCadastroFuncionario
         end
       end
       object tsVinculo: TTabSheet
-        Caption = 'V'#237'nculo'
+        Caption = '&V'#237'nculo'
         ImageIndex = 2
         object Panel1: TPanel
           Left = 0
@@ -153,12 +153,14 @@ inherited FrmCadastroFuncionario: TFrmCadastroFuncionario
               Height = 13
               Caption = 'Cargo'
             end
-            object SpeedButton1: TSpeedButton
+            object spbIdCargo: TSpeedButton
               Left = 70
               Top = 67
               Width = 23
               Height = 22
               Caption = '...'
+              Enabled = False
+              OnClick = spbIdCargoClick
             end
             object lblEmpresa: TLabel
               Left = 10
@@ -167,12 +169,14 @@ inherited FrmCadastroFuncionario: TFrmCadastroFuncionario
               Height = 13
               Caption = 'Empresa'
             end
-            object spbEmpresa: TSpeedButton
+            object spbIdEmpresa: TSpeedButton
               Left = 70
               Top = 106
               Width = 23
               Height = 22
               Caption = '...'
+              Enabled = False
+              OnClick = spbIdEmpresaClick
             end
             object lblDataAdmissao: TLabel
               Left = 395
@@ -196,6 +200,7 @@ inherited FrmCadastroFuncionario: TFrmCadastroFuncionario
               CharCase = ecUpperCase
               Enabled = False
               TabOrder = 0
+              OnChange = edtIdCargoChange
             end
             object edtCargo: TEdit
               Left = 95
@@ -214,6 +219,7 @@ inherited FrmCadastroFuncionario: TFrmCadastroFuncionario
               CharCase = ecUpperCase
               Enabled = False
               TabOrder = 2
+              OnChange = edtIdEmpresaChange
             end
             object edtEmpresa: TEdit
               Left = 95
@@ -242,7 +248,7 @@ inherited FrmCadastroFuncionario: TFrmCadastroFuncionario
               Enabled = False
               TabOrder = 5
             end
-            object Edit2: TEdit
+            object edtNomeCompleto: TEdit
               Left = 95
               Top = 25
               Width = 285
@@ -259,6 +265,9 @@ inherited FrmCadastroFuncionario: TFrmCadastroFuncionario
             Height = 41
             Align = alBottom
             TabOrder = 1
+            DesignSize = (
+              494
+              41)
             object DBNavigator1: TDBNavigator
               Left = 320
               Top = 5
@@ -266,6 +275,7 @@ inherited FrmCadastroFuncionario: TFrmCadastroFuncionario
               Height = 30
               DataSource = dsVinculo
               VisibleButtons = [nbFirst, nbPrior, nbNext, nbLast]
+              Anchors = [akTop, akRight]
               TabOrder = 0
             end
             object btnNovoVinculo: TButton
@@ -274,7 +284,9 @@ inherited FrmCadastroFuncionario: TFrmCadastroFuncionario
               Width = 75
               Height = 25
               Caption = 'Novo'
+              Enabled = False
               TabOrder = 1
+              OnClick = btnNovoVinculoClick
             end
             object btnSalvarVinculo: TButton
               Left = 88
@@ -282,6 +294,7 @@ inherited FrmCadastroFuncionario: TFrmCadastroFuncionario
               Width = 75
               Height = 25
               Caption = 'Salvar'
+              Enabled = False
               TabOrder = 2
               OnClick = btnSalvarVinculoClick
             end
@@ -318,7 +331,16 @@ inherited FrmCadastroFuncionario: TFrmCadastroFuncionario
     Top = 192
   end
   object dsVinculo: TDataSource
-    Left = 444
+    OnDataChange = dsVinculoDataChange
+    Left = 436
     Top = 347
+  end
+  object dsCargo: TDataSource
+    Left = 436
+    Top = 243
+  end
+  object dsEmpresa: TDataSource
+    Left = 436
+    Top = 291
   end
 end

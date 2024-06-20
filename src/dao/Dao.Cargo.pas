@@ -11,8 +11,9 @@ type
   TDAOCargo = class(TInterfacedObject, IDAOCargo)
     private
       FConexao: TConexao;
-      FSQLQryCargo: TSQLQuery;
-      FDataSource: TDataSource;
+      FSqlQryCargo: TSQLQuery;
+      FDspCargo: TDataSetProvider;
+      FCdsCargo: TClientDataSet;
     public
       constructor Create(var ADataSource: TDataSource);
       destructor Destroy; override;
@@ -33,15 +34,24 @@ constructor TDAOCargo.Create(var ADataSource: TDataSource);
 begin
   FConexao := TConexao.Create;
 
-  FSQLQryCargo := TSQLQuery.Create(nil);
-  FSQLQryCargo.SQLConnection := FConexao.GetConexao;
+  FSqlQryCargo := TSQLQuery.Create(nil);
+  FSqlQryCargo.SQLConnection := FConexao.GetConexao;
 
-  FDataSource := ADataSource;
-  FDataSource.DataSet := TDataSet(FSQLQryCargo);
+  FDspCargo := TDataSetProvider.Create(nil);
+  FDspCargo.DataSet := FSqlQryCargo;
+
+  FCdsCargo := TClientDataSet.Create(nil);
+  FCdsCargo.SetProvider(FDspCargo);
+
+  ADataSource.DataSet := FCdsCargo;
 end;
 
 destructor TDAOCargo.Destroy;
 begin
+  FreeandNil(FSqlQryCargo);
+  FreeandNil(FDspCargo);
+  FreeandNil(FCdsCargo);
+
   inherited Destroy;
 end;
 
@@ -55,13 +65,13 @@ begin
   Result := Self;
 
   try
-    FSQLQryCargo.Close;
-    FSQLQryCargo.SQL.Clear;
-    FSQLQryCargo.SQL.Add('SELECT c.id, c.descricao');
-    FSQLQryCargo.SQL.Add('  FROM cargos c');
-    FSQLQryCargo.SQL.Add(' WHERE c.id = :idCargo');
-    FSQLQryCargo.ParamByName('idCargo').AsInteger := AValue;
-    FSQLQryCargo.Open;
+    FSqlQryCargo.Close;
+    FSqlQryCargo.SQL.Clear;
+    FSqlQryCargo.SQL.Add('SELECT c.id, c.descricao');
+    FSqlQryCargo.SQL.Add('  FROM CARGOS c');
+    FSqlQryCargo.SQL.Add(' WHERE c.id = :idCargo');
+    FSqlQryCargo.ParamByName('idCargo').AsInteger := AValue;
+    FCdsCargo.Open;
   except on E: Exception do
     raise Exception.Create('Error ao consultar: ' + E.Message);
   end;
@@ -72,12 +82,12 @@ begin
   Result := Self;
 
   try
-    FSQLQryCargo.Close;
-    FSQLQryCargo.SQL.Clear;
-    FSQLQryCargo.SQL.Add('SELECT c.id, c.descricao');
-    FSQLQryCargo.SQL.Add('  FROM cargos c');
-    FSQLQryCargo.SQL.Add(' ORDER BY c.id');
-    FSQLQryCargo.Open;
+    FSqlQryCargo.Close;
+    FSqlQryCargo.SQL.Clear;
+    FSqlQryCargo.SQL.Add('SELECT c.id, c.descricao');
+    FSqlQryCargo.SQL.Add('  FROM CARGOS c');
+    FSqlQryCargo.SQL.Add(' ORDER BY c.id');
+    FCdsCargo.Open;
   except on E: Exception do
     raise Exception.Create('Error ao listar: ' + E.Message);
   end;
@@ -88,12 +98,12 @@ begin
   Result := Self;
 
   try
-    FSQLQryCargo.Close;
-    FSQLQryCargo.SQL.Clear;
-    FSQLQryCargo.SQL.Add('INSERT INTO cargos (descricao');
-    FSQLQryCargo.SQL.Add('     VALUES (:descricao)');
-    FSQLQryCargo.ParamByName('descricao').AsString := ACargo.Descricao;
-    FSQLQryCargo.ExecSQL;
+    FSqlQryCargo.Close;
+    FSqlQryCargo.SQL.Clear;
+    FSqlQryCargo.SQL.Add('INSERT INTO CARGOS (descricao)');
+    FSqlQryCargo.SQL.Add('     VALUES (:descricao)');
+    FSqlQryCargo.ParamByName('descricao').AsString := ACargo.Descricao;
+    FCdsCargo.Execute;
   except on E: Exception do
     raise Exception.Create('Error ao inserir: ' + E.Message);
   end;
@@ -104,14 +114,14 @@ begin
   Result := Self;
 
   try
-    FSQLQryCargo.Close;
-    FSQLQryCargo.SQL.Clear;
-    FSQLQryCargo.SQL.Add('UPDATE cargos');
-    FSQLQryCargo.SQL.Add('   SET descricao = :descricao');
-    FSQLQryCargo.SQL.Add('WHERE id = :idCargo');
-    FSQLQryCargo.ParamByName('descricao').AsString := ACargo.Descricao;
-    FSQLQryCargo.ParamByName('idCargo').AsInteger := ACargo.Id;
-    FSQLQryCargo.ExecSQL;
+    FSqlQryCargo.Close;
+    FSqlQryCargo.SQL.Clear;
+    FSqlQryCargo.SQL.Add('UPDATE CARGOS');
+    FSqlQryCargo.SQL.Add('   SET descricao = :descricao');
+    FSqlQryCargo.SQL.Add('WHERE id = :idCargo');
+    FSqlQryCargo.ParamByName('descricao').AsString := ACargo.Descricao;
+    FSqlQryCargo.ParamByName('idCargo').AsInteger := ACargo.Id;
+    FCdsCargo.Execute;
   except on E: Exception do
     raise Exception.Create('Error ao atualizar: ' + E.Message);
   end;
@@ -122,12 +132,12 @@ begin
   Result := Self;
 
   try
-    FSQLQryCargo.Close;
-    FSQLQryCargo.SQL.Clear;
-    FSQLQryCargo.SQL.Add('DELETE FROM cargos');
-    FSQLQryCargo.SQL.Add(' WHERE id = :idCargo');
-    FSQLQryCargo.ParamByName('idCargo').AsInteger := AValue;
-    FSQLQryCargo.ExecSQL;
+    FSqlQryCargo.Close;
+    FSqlQryCargo.SQL.Clear;
+    FSqlQryCargo.SQL.Add('DELETE FROM CARGOS');
+    FSqlQryCargo.SQL.Add(' WHERE id = :idCargo');
+    FSqlQryCargo.ParamByName('idCargo').AsInteger := AValue;
+    FCdsCargo.Execute;
   except on E: Exception do
     raise Exception.Create('Error ao excluir: ' + E.Message);
   end;

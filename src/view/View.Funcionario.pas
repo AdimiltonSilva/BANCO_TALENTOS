@@ -36,11 +36,11 @@ type
     Panel2: TPanel;
     lblCargo: TLabel;
     edtIdCargo: TEdit;
-    SpeedButton1: TSpeedButton;
+    spbIdCargo: TSpeedButton;
     edtCargo: TEdit;
     lblEmpresa: TLabel;
     edtIdEmpresa: TEdit;
-    spbEmpresa: TSpeedButton;
+    spbIdEmpresa: TSpeedButton;
     edtEmpresa: TEdit;
     lblDataAdmissao: TLabel;
     dtpDataAdmissao: TDateTimePicker;
@@ -50,23 +50,35 @@ type
     dsVinculo: TDataSource;
     lblFuncionario: TLabel;
     edtIdFuncionario: TEdit;
-    Edit2: TEdit;
+    edtNomeCompleto: TEdit;
     btnNovoVinculo: TButton;
     btnSalvarVinculo: TButton;
+    dsCargo: TDataSource;
+    dsEmpresa: TDataSource;
     procedure FormCreate(Sender: TObject);
+    procedure pgcMainChange(Sender: TObject);
+    procedure dsConsultarDataChange(Sender: TObject; Field: TField);
     procedure btnIncluirClick(Sender: TObject);
     procedure btnSalvarClick(Sender: TObject);
     procedure btnPesquisarClick(Sender: TObject);
     procedure btnAlterarClick(Sender: TObject);
-    procedure dsConsultarDataChange(Sender: TObject; Field: TField);
     procedure btnExcluirClick(Sender: TObject);
     procedure btnImprimirClick(Sender: TObject);
+    procedure btnNovoVinculoClick(Sender: TObject);
     procedure btnSalvarVinculoClick(Sender: TObject);
+    procedure spbIdCargoClick(Sender: TObject);
+    procedure edtIdCargoChange(Sender: TObject);
+    procedure dsVinculoDataChange(Sender: TObject; Field: TField);
+    procedure spbIdEmpresaClick(Sender: TObject);
+    procedure edtIdEmpresaChange(Sender: TObject);
   private
     { Private declarations }
     FControllerFuncionario: IControllerFuncionario;
     FControllerVinculo: IControllerVinculo;
+    FControllerCargo: IControllerCargo;
+    FControllerEmpresa: IControllerEmpresa;
     procedure ConfigurarGrid;
+    procedure LimparEditsVinculo;
   public
     { Public declarations }
   end;
@@ -77,7 +89,7 @@ var
 implementation
 
 uses
-  View.Listagem;
+  View.Listagem, View.Pesquisa;
 
 {$R *.dfm}
 
@@ -86,20 +98,35 @@ procedure TFrmCadastroFuncionario.FormCreate(Sender: TObject);
 begin
   inherited;
 
+  FControllerCargo := TControllerCargo.New(dsCargo);
+  FControllerEmpresa := TControllerEmpresa.New(dsEmpresa);
+  FControllerVinculo := TControllerVinculo.New(dsVinculo);
   FControllerFuncionario := TControllerFuncionario.New(dsConsultar);
-  FControllerFuncionario.ListarTodos;
 
-  FControllerVinculo := TControllerVinculo.New(dsConsultar);
-  FControllerVinculo.ListarVinculoPorFuncionario(dsConsultar.DataSet.FieldByName('id').AsInteger);
+  FControllerFuncionario
+    .ListarTodos;
+
+  FControllerVinculo
+    .ListarVinculoPorFuncionario(dsConsultar.DataSet.FieldByName('id').AsInteger);
 
   ConfigurarGrid;
 end;
 
 procedure TFrmCadastroFuncionario.ConfigurarGrid;
 begin
-  dbgConsultar.Columns.Items[0].Width := 40;
-  dbgConsultar.Columns.Items[1].Width := 280;
-  dbgConsultar.Columns.Items[2].Width := 120;
+  if not (dsConsultar.DataSet.IsEmpty) then
+  begin
+    dbgConsultar.Columns.Items[0].Width := 40;
+    dbgConsultar.Columns.Items[1].Width := -1;
+    dbgConsultar.Columns.Items[2].Width := -1;
+    dbgConsultar.Columns.Items[3].Width := 150;
+    {
+    dbgConsultar.Columns.Items[4].Width := 150;
+    dbgConsultar.Columns.Items[5].Width := 80;
+    dbgConsultar.Columns.Items[6].Width := 150;
+    dbgConsultar.Columns.Items[7].Width := 150;
+    }
+  end;
 end;
 
 procedure TFrmCadastroFuncionario.btnPesquisarClick(Sender: TObject);
@@ -183,6 +210,13 @@ begin
   edtId.Text   := dsConsultar.DataSet.FieldByName('id').AsString;
   edtNome.Text := dsConsultar.DataSet.FieldByName('nome').AsString;
   edtSobreNome.Text  := dsConsultar.DataSet.FieldByName('SobreNome').AsString;
+
+  edtIdFuncionario.Text := dsConsultar.DataSet.FieldByName('id').AsString;
+  edtNomeCompleto.Text := dsConsultar.DataSet.FieldByName('nome').AsString + ' ' +
+                          dsConsultar.DataSet.FieldByName('SobreNome').AsString;
+
+  FControllerVinculo
+    .ListarVinculoPorFuncionario(StrToInt(edtId.Text));
 end;
 
 procedure TFrmCadastroFuncionario.btnImprimirClick(Sender: TObject);
@@ -207,60 +241,133 @@ begin
   end;
 end;
 
+procedure TFrmCadastroFuncionario.pgcMainChange(Sender: TObject);
+begin
+  inherited;
+  pnlBottuns.Visible := not (pgcMain.ActivePage = tsVinculo);
+
+  if (pgcMain.ActivePage = tsVinculo) then
+  begin
+    FControllerVinculo
+      .IdEmpresa(StrToIntDef(edtIdEmpresa.Text,0))
+      .IdFuncionario(StrToIntDef(edtIdFuncionario.Text, 0))
+      .ListarVinculoPorFuncionario(StrToIntDef(edtIdFuncionario.Text, 0));
+
+    btnNovoVinculo.Enabled := True;
+    btnSalvarVinculo.Enabled := False;
+  end;
+end;
+
+procedure TFrmCadastroFuncionario.btnNovoVinculoClick(Sender: TObject);
+begin
+  inherited;
+  FOperacao := opVincular;
+
+  spbIdCargo.Enabled := True;
+  spbIdEmpresa.Enabled := True;
+  LimparEditsVinculo;
+  btnNovoVinculo.Enabled := False;
+  btnSalvarVinculo.Enabled := True;
+end;
+
 procedure TFrmCadastroFuncionario.btnSalvarVinculoClick(Sender: TObject);
 begin
   inherited;
-{
-procedure TFrmCadastroEmpresa.HabilitarEditsVinculo(AValue: Boolean);
-begin
-  edtId.Enabled := False;
-  edtRazaoSocial.Enabled := AValue;
-  edtCNPJ.Enabled := AValue;
-end;
 
-procedure TFrmCadastroEmpresa.btnAdicionarVinculoClick(Sender: TObject);
-begin
-  inherited;
-
-  FOperacao := opVincular;
+  if ((edtIdCargo.Text = EmptyStr) or (edtIdEmpresa.Text = EmptyStr)) then
+  begin
+    ShowMessage('Favor informar o Cargo e a Empresa');
+    Exit;
+  end;
 
   FControllerVinculo
-    .IdEmpresa(StrToIntDef(edtIdEmpresa.Text, 0))
     .IdFuncionario(StrToIntDef(edtIdFuncionario.Text, 0))
+    .IdCargo(StrToIntDef(edtIdCargo.Text, 0))
+    .IdEmpresa(StrToIntDef(edtIdEmpresa.Text, 0))
+    .DataAdmissao(dtpDataAdmissao.DateTime)
     .ConsultarVinculo;
 
   if not dsVinculo.DataSet.IsEmpty then
   begin
-    ShowMessage('Vinculo jï¿½ cadastrado.');
-    Exit
+    ShowMessage('Vínculo já cadastrado.');
+    Exit;
   end;
 
   FControllerVinculo
-    .IdEmpresa(StrToIntDef(edtIdEmpresa.Text,0))
     .IdFuncionario(StrToIntDef(edtIdFuncionario.Text, 0))
+    .IdCargo(StrToIntDef(edtIdCargo.Text, 0))
+    .IdEmpresa(StrToIntDef(edtIdEmpresa.Text, 0))
+    .DataAdmissao(dtpDataAdmissao.Date)
     .Adicionar
-    .ListarPorEmpresa(StrToIntDef(edtIdEmpresa.Text,0));
+    .ListarVinculoPorFuncionario(StrToIntDef(edtIdFuncionario.Text, 0));
 
-  ConfigurarGridVinculo;
+  FOperacao := opConsultar;
+  spbIdCargo.Enabled := False;
+  spbIdEmpresa.Enabled := False;
+  btnNovoVinculo.Enabled := True;
+  btnSalvarVinculo.Enabled := False;
 end;
 
-procedure TFrmCadastroEmpresa.btnRemoverVinculoClick(Sender: TObject);
+procedure TFrmCadastroFuncionario.spbIdCargoClick(Sender: TObject);
+begin
+  with TFrmPesquisa.Create(nil) do
+  begin
+    Caption := 'Pesquisar por Cargo';
+    TipoPesquisa := tpCargo;
+    ShowModal;
+
+    edtIdCargo.Text := IntToStr(IdRetorno);
+    edtCargo.Text := descRetorno;
+    Free;
+  end;
+end;
+
+procedure TFrmCadastroFuncionario.spbIdEmpresaClick(Sender: TObject);
+begin
+  with TFrmPesquisa.Create(nil) do
+  begin
+    Caption := 'Pesquisar por Empresa';
+    TipoPesquisa := tpEmpresa;
+    ShowModal;
+
+    edtIdEmpresa.Text := IntToStr(IdRetorno);
+    edtEmpresa.Text := descRetorno;
+    Free;
+  end;
+end;
+
+procedure TFrmCadastroFuncionario.edtIdCargoChange(Sender: TObject);
 begin
   inherited;
-
-//  FControllerVinculo
-//    .ListarPorEmpresa(StrToIntDef(edtIdEmpresa.Text, 0));
-
-  FControllerVinculo
-    .IdEmpresa(StrToIntDef(edtIdEmpresa.Text,0))
-    .IdFuncionario(StrToIntDef(edtIdFuncionario.Text, 0))
-    .Remover
-    .ListarPorEmpresa(StrToIntDef(edtIdEmpresa.Text,0));
-
-  ConfigurarGridVinculo;
+  if edtIdCargo.Text <> '' then
+    FControllerCargo.BuscarPorId(StrToInt(edtIdCargo.Text));
 end;
 
-}
+procedure TFrmCadastroFuncionario.dsVinculoDataChange(Sender: TObject;
+  Field: TField);
+begin
+  inherited;
+  edtIdCargo.Text := dsVinculo.DataSet.FieldByName('id_cargo').AsString;
+  edtCargo.Text := dsVinculo.DataSet.FieldByName('cargo').AsString;
+
+  edtIdEmpresa.Text := dsVinculo.DataSet.FieldByName('id_empresa').AsString;
+  edtEmpresa.Text := dsVinculo.DataSet.FieldByName('razao_social').AsString;
+end;
+
+procedure TFrmCadastroFuncionario.edtIdEmpresaChange(Sender: TObject);
+begin
+  inherited;
+  if edtIdEmpresa.Text <> '' then
+    FControllerEmpresa.BuscarPorId(StrToInt(edtIdEmpresa.Text));
+end;
+
+procedure TFrmCadastroFuncionario.LimparEditsVinculo;
+begin
+  edtIdCargo.Clear;
+  edtCargo.Clear;
+  edtIdEmpresa.Clear;
+  edtEmpresa.Clear;
+  dtpDataAdmissao.Date := Now();
 end;
 
 end.

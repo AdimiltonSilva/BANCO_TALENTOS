@@ -19,6 +19,7 @@ type
     procedure btnAlterarClick(Sender: TObject);
     procedure btnExcluirClick(Sender: TObject);
     procedure btnSalvarClick(Sender: TObject);
+    procedure dsConsultarDataChange(Sender: TObject; Field: TField);
   private
     { Private declarations }
     FControllerCargo: IControllerCargo;
@@ -49,7 +50,7 @@ begin
   if not (dsConsultar.DataSet.IsEmpty) then
   begin
     dbgConsultar.Columns.Items[0].Width := 40;
-    dbgConsultar.Columns.Items[1].Width := 280;
+    dbgConsultar.Columns.Items[1].Width := 300;
   end;
 end;
 
@@ -101,6 +102,15 @@ begin
   ConfigurarGrid;
 
   inherited;
+end;
+
+procedure TFrmCadastroCargo.dsConsultarDataChange(Sender: TObject;
+  Field: TField);
+begin
+  inherited;
+
+  edtId.Text := dsConsultar.DataSet.FieldByName('id').AsString;
+  edtDescricao.Text := dsConsultar.DataSet.FieldByName('descricao').AsString;
 end;
 
 end.

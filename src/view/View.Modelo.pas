@@ -65,9 +65,20 @@ begin
   FOperacao := opConsultar;
 end;
 
+procedure TFrmCadastroPadrao.btnIncluirClick(Sender: TObject);
+begin
+  FOperacao := opIncluir;
+
+  LimparCampos;
+  HabilitarBotoes(False);
+  HabilitarCampos(True);
+  pgcMain.ActivePage := tsEdit;
+end;
+
 procedure TFrmCadastroPadrao.btnAlterarClick(Sender: TObject);
 begin
   FOperacao := opAlterar;
+  
   HabilitarBotoes(False);
   HabilitarCampos(True);
   pgcMain.ActivePage := tsEdit;
@@ -82,16 +93,6 @@ end;
 procedure TFrmCadastroPadrao.btnFecharClick(Sender: TObject);
 begin
   Close;
-end;
-
-procedure TFrmCadastroPadrao.btnIncluirClick(Sender: TObject);
-begin
-  FOperacao := opIncluir;
-
-  LimparCampos;
-  HabilitarBotoes(False);
-  HabilitarCampos(True);
-  pgcMain.ActivePage := tsEdit;
 end;
 
 procedure TFrmCadastroPadrao.btnSalvarClick(Sender: TObject);

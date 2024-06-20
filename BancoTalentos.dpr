@@ -23,12 +23,14 @@ uses
   Dao.Cargo in 'src\dao\Dao.Cargo.pas',
   Controller.Vinculo in 'src\controller\Controller.Vinculo.pas',
   Dao.Vinculo in 'src\dao\Dao.Vinculo.pas',
-  Model.Vinculo in 'src\model\Model.Vinculo.pas';
+  Model.Vinculo in 'src\model\Model.Vinculo.pas',
+  View.Pesquisa in 'src\view\View.Pesquisa.pas' {FrmPesquisa};
 
 {$R *.res}
 
 begin
   Application.Initialize;
   Application.CreateForm(TFrmPrincipal, FrmPrincipal);
+  Application.CreateForm(TFrmPesquisa, FrmPesquisa);
   Application.Run;
 end.

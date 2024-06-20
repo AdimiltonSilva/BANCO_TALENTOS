@@ -4,15 +4,16 @@ interface
 
 uses
   SysUtils,
-  DB, FMTBcd, SqlExpr, Provider, DBClient, DBXpress,
+  DB, FMTBcd, SqlExpr, Provider, DBClient, DBXpress, MidasLib,
   UntConexao, Model.Interfaces, Dao.Interfaces;
 
 type
   TDAOEmpresa = class(TInterfacedObject, IDAOEmpresa)
     private
       FConexao: TConexao;
-      FSQLQryEmpresa: TSQLQuery;
-      FDataSource: TDataSource;
+      FSqlQryEmpresa: TSQLQuery;
+      FDspEmpresa: TDataSetProvider;
+      FCdsEmpresa: TClientDataSet;
     public
       constructor Create(var ADataSource: TDataSource);
       destructor Destroy; override;
@@ -35,12 +36,23 @@ begin
 
   FSQLQryEmpresa := TSQLQuery.Create(nil);
   FSQLQryEmpresa.SQLConnection := FConexao.GetConexao;
-  FDataSource := ADataSource;
-  FDataSource.DataSet := TDataSet(FSQLQryEmpresa);
+
+  FDspEmpresa := TDataSetProvider.Create(nil);
+  FDspEmpresa.DataSet := FSqlQryEmpresa;
+  FDspEmpresa.Options := [poAllowCommandText];
+
+  FCdsEmpresa := TClientDataSet.Create(nil);
+  FCdsEmpresa.SetProvider(FDspEmpresa);
+
+  ADataSource.DataSet := FCdsEmpresa;
 end;
 
 destructor TDAOEmpresa.Destroy;
 begin
+  FreeandNil(FSqlQryEmpresa);
+  FreeandNil(FDspEmpresa);
+  FreeandNil(FCdsEmpresa);
+
   inherited Destroy;
 end;
 
@@ -54,13 +66,14 @@ begin
   Result := self;
 
   try
+    FSQLQryEmpresa.Active := False;
     FSQLQryEmpresa.Close;
     FSQLQryEmpresa.SQL.Clear;
     FSQLQryEmpresa.SQL.Add('SELECT e.id, e.razao_social, e.cnpj');
-    FSQLQryEmpresa.SQL.Add('  FROM empresas e');
+    FSQLQryEmpresa.SQL.Add('  FROM EMPRESAS e');
     FSQLQryEmpresa.SQL.Add(' WHERE e.id = :idEmpresa');
     FSQLQryEmpresa.ParamByName('idEmpresa').AsInteger := AValue;
-    FSQLQryEmpresa.Open;
+    FSqlQryEmpresa.Active := True;
   except on E: Exception do
     raise Exception.Create('Error ao consultar: ' + E.Message);
   end;
@@ -71,12 +84,13 @@ begin
   Result := Self;
 
   try
-    FSQLQryEmpresa.Close;
+    FSQLQryEmpresa.Active := False;
     FSQLQryEmpresa.SQL.Clear;
     FSQLQryEmpresa.SQL.Add('SELECT e.id, e.razao_social, e.cnpj');
-    FSQLQryEmpresa.SQL.Add('  FROM empresas e');
+    FSQLQryEmpresa.SQL.Add('  FROM EMPRESAS e');
     FSQLQryEmpresa.SQL.Add(' ORDER BY e.id');
-    FSQLQryEmpresa.Open;
+    FSqlQryEmpresa.Active := True;
+    FCdsEmpresa.Active := True;
   except on E: Exception do
     raise Exception.Create('Error ao listar: ' + E.Message);
   end;
@@ -89,11 +103,11 @@ begin
   try
     FSQLQryEmpresa.Close;
     FSQLQryEmpresa.SQL.Clear;
-    FSQLQryEmpresa.SQL.Add('INSERT INTO empresas (razao_social, cnpj');
+    FSQLQryEmpresa.SQL.Add('INSERT INTO EMPRESAS (razao_social, cnpj) ');
     FSQLQryEmpresa.SQL.Add('     VALUES (:razao_social, :cnpj)');
     FSQLQryEmpresa.ParamByName('razao_social').AsString := AEmpresa.RazaoSocial;
     FSQLQryEmpresa.ParamByName('cnpj').AsString := AEmpresa.CNPJ;
-    FSQLQryEmpresa.ExecSQL;
+    FCdsEmpresa.Execute;
   except on E: Exception do
     raise Exception.Create('Error ao inserir: ' + E.Message);
   end;
@@ -106,14 +120,14 @@ begin
   try
     FSQLQryEmpresa.Close;
     FSQLQryEmpresa.SQL.Clear;
-    FSQLQryEmpresa.SQL.Add('UPDATE empresas');
-    FSQLQryEmpresa.SQL.Add('   SET razao_social = :razao_social,');
+    FSQLQryEmpresa.SQL.Add('UPDATE EMPRESAS');
+    FSQLQryEmpresa.SQL.Add('   SET razao_social = :razaoSocial,');
     FSQLQryEmpresa.SQL.Add('       cnpj = :cnpj');
     FSQLQryEmpresa.SQL.Add('WHERE id = :idEmpresa');
-    FSQLQryEmpresa.ParamByName('razao_social').AsString := AEmpresa.RazaoSocial;
+    FSQLQryEmpresa.ParamByName('razaoSocial').AsString := AEmpresa.RazaoSocial;
     FSQLQryEmpresa.ParamByName('cnpj').AsString := AEmpresa.CNPJ;
     FSQLQryEmpresa.ParamByName('idEmpresa').AsInteger := AEmpresa.Id;
-    FSQLQryEmpresa.ExecSQL;
+    FSqlQryEmpresa.ExecSql;
   except on E: Exception do
     raise Exception.Create('Error ao atualizar: ' + E.Message);
   end;
@@ -126,13 +140,14 @@ begin
   try
     FSQLQryEmpresa.Close;
     FSQLQryEmpresa.SQL.Clear;
-    FSQLQryEmpresa.SQL.Add('DELETE FROM empresas');
+    FSQLQryEmpresa.SQL.Add('DELETE FROM EMPRESAS');
     FSQLQryEmpresa.SQL.Add(' WHERE id = :idEmpresa');
     FSQLQryEmpresa.ParamByName('idEmpresa').AsInteger := AValue;
-    FSQLQryEmpresa.ExecSQL;
+    FCdsEmpresa.Execute;
   except on E: Exception do
     raise Exception.Create('Error ao excluir: ' + E.Message);
   end;
 end;
+
 end.
 

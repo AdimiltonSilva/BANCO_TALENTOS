@@ -86,7 +86,7 @@ end;
 function TModelEmpresa.BuscarPorId(AValue: integer): IModelEmpresa;
 begin
   Result := Self;
-  FDAOEmpresa.Excluir(AValue);
+  FDAOEmpresa.BuscarPorId(AValue);
 end;
 
 function TModelEmpresa.ListarTodos: IModelEmpresa;

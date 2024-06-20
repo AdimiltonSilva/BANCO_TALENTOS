@@ -7,6 +7,7 @@ inherited FrmCadastroCargo: TFrmCadastroCargo
   TextHeight = 13
   inherited pnlcontainer: TPanel
     inherited pgcMain: TPageControl
+      ActivePage = tsEdit
       inherited tsConsulta: TTabSheet
         inherited pnlMainConsultar: TPanel
           inherited pnlNavegador: TPanel
@@ -55,5 +56,8 @@ inherited FrmCadastroCargo: TFrmCadastroCargo
     inherited btnExcluir: TButton
       OnClick = btnExcluirClick
     end
+  end
+  inherited dsConsultar: TDataSource
+    OnDataChange = dsConsultarDataChange
   end
 end

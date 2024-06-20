@@ -9,10 +9,6 @@ type
   TConexao = class
     private
       FConn: TSQLConnection;
-      FSQLQuery: TSQLQuery;
-      FDataSetProvider: TDataSetProvider;
-      FClientDataSet: TClientDataSet;
-      FDataSource: TDataSource;
       procedure ConfigurarConexao;
     public
       constructor Create;
@@ -65,18 +61,6 @@ begin
     Params.Values['Trim Char'] := 'False';
     VendorLib := 'gds32.dll';
   end;
-
-  FSQLQuery := TSQLQuery.Create(nil);
-  FSQLQuery.SQLConnection := FConn;
-
-  FDataSetProvider := TDataSetProvider.Create(nil);
-  FDataSetProvider.DataSet := FSQLQuery;
-
-  FClientDataSet := TClientDataSet.Create(nil);
-  FClientDataSet.SetProvider(FDataSetProvider);
-
-  FDataSource := TDataSource.Create(nil);
-  FDataSource.DataSet := FClientDataSet;
 end;
 
 function TConexao.GetConexao: TSQLConnection;

@@ -11,8 +11,9 @@ type
   TDAOVinculo = class(TInterfacedObject, IDAOVinculo)
     private
       FConexao: TConexao;
-      FSQLQryVinculo: TSQLQuery;
-      FDataSource: TDataSource;
+      FSqlQryVinculo: TSQLQuery;
+      FDspVinculo: TDataSetProvider;
+      FCdsVinculo: TClientDataSet;
     public
       constructor Create(var ADataSource: TDataSource);
       destructor Destroy; override;
@@ -34,12 +35,21 @@ begin
 
   FSQLQryVinculo := TSQLQuery.Create(nil);
   FSQLQryVinculo.SQLConnection := FConexao.GetConexao;
-  FDataSource := ADataSource;
-  FDataSource.DataSet := TDataSet(FSQLQryVinculo);
+
+  FDspVinculo := TDataSetProvider.Create(nil);
+  FDspVinculo.DataSet := FSqlQryVinculo;
+
+  FCdsVinculo := TClientDataSet.Create(nil);
+  FCdsVinculo.SetProvider(FDspVinculo);
+
+  ADataSource.DataSet := FCdsVinculo;
 end;
 
 destructor TDAOVinculo.Destroy;
 begin
+  FreeandNil(FSqlQryVinculo);
+  FreeandNil(FDspVinculo);
+  FreeandNil(FCdsVinculo);
 
   inherited Destroy;
 end;
@@ -56,15 +66,13 @@ begin
   try
     FSQLQryVinculo.Close;
     FSQLQryVinculo.SQL.Clear;
-    FSQLQryVinculo.SQL.Add('INSERT INTO vinculo (id_funcionario, id_idcargo, id_empresa, data_admissao)');
-    FSQLQryVinculo.SQL.Add('             VALUES (:idFuncionario, :idCargo, :idEmpresa, :dataAdmissao)');
+    FSQLQryVinculo.SQL.Add('INSERT INTO VINCULOS (id_funcionario, id_idcargo, id_empresa, data_admissao)');
+    FSQLQryVinculo.SQL.Add('              VALUES (:idFuncionario, :idCargo, :idEmpresa, :dataAdmissao)');
     FSQLQryVinculo.ParamByName('idFuncionario').AsInteger := AVinculo.idFuncionario;
     FSQLQryVinculo.ParamByName('idCargo').AsInteger := AVinculo.IdCargo;
     FSQLQryVinculo.ParamByName('idEmpresa').AsInteger := AVinculo.IdEmpresa;
     FSQLQryVinculo.ParamByName('dataAdmissao').AsDateTime := AVinculo.DataAdmissao;
-    FSQLQryVinculo.ExecSQL;
-
-
+    FCdsVinculo.Execute;
   except on E: Exception do
     raise Exception.Create('Error ao inserir. ' + E.Message);
   end;
@@ -77,7 +85,7 @@ begin
   try
     FSQLQryVinculo.Close;
     FSQLQryVinculo.SQL.Clear;
-    FSQLQryVinculo.SQL.Add('DELETE FROM vinculo ');
+    FSQLQryVinculo.SQL.Add('DELETE FROM VINCULOS ');
     FSQLQryVinculo.SQL.Add(' WHERE id_funcionario = :idFuncionario ');
     FSQLQryVinculo.SQL.Add('   AND id_empresa = :idEmpresa');
     FSQLQryVinculo.SQL.Add('   AND id_cargo = :idCargo');
@@ -86,7 +94,7 @@ begin
     FSQLQryVinculo.ParamByName('idEmpresa').AsInteger := AVinculo.IdEmpresa;
     FSQLQryVinculo.ParamByName('idCargo').AsInteger := AVinculo.IdCargo;
     FSQLQryVinculo.ParamByName('dataAdmissao').AsDate := AVinculo.DataAdmissao;
-    FSQLQryVinculo.ExecSQL;
+    FCdsVinculo.Execute;
   except on E: Exception do
     raise Exception.Create('Error ao excluir um vinculo. ' + E.Message);
   end;
@@ -98,18 +106,22 @@ begin
 
   try
     FSQLQryVinculo.Close;
+    FSQLQryVinculo.Active := False;
     FSQLQryVinculo.SQL.Clear;
-    FSQLQryVinculo.SQL.Add('SELECT v.id_empresa, e.razao_social, ');
+    FSQLQryVinculo.SQL.Add('SELECT DISTINCT ');
     FSQLQryVinculo.SQL.Add('       v.id_cargo, c.descricao AS cargo, ');
-    FSQLQryVinculo.SQL.Add('       v.data_admissao');
-    FSQLQryVinculo.SQL.Add('  FROM vinculo v');
-    FSQLQryVinculo.SQL.Add(' INNER JOIN cargo c ON v.id_cargo = c.id');
-    FSQLQryVinculo.SQL.Add(' INNER JOIN empresa e ON v.id_empresa = e.id');
-    FSQLQryVinculo.SQL.Add(' WHERE v.id_funcionario = :idFuncionario');
+    FSQLQryVinculo.SQL.Add('       v.id_empresa, e.razao_social, ');
+    FSQLQryVinculo.SQL.Add('       v.data_admissao ');
+    FSQLQryVinculo.SQL.Add('  FROM VINCULOS v ');
+    FSQLQryVinculo.SQL.Add(' INNER JOIN CARGOS c ON c.id = v.id_cargo ');
+    FSQLQryVinculo.SQL.Add(' INNER JOIN EMPRESAS e ON e.id = v.id_empresa ');
+    FSQLQryVinculo.SQL.Add(' WHERE v.id_funcionario = :idFuncionario ');
+    FSQLQryVinculo.SQL.Add(' ORDER BY v.id_funcionario ASC, v.data_admissao DESC');
     FSQLQryVinculo.ParamByName('idFuncionario').AsInteger := AValue;
-    FSQLQryVinculo.Open;
+    FSQLQryVinculo.Active := True;
+    FCdsVinculo.Active := True;
   except on E: Exception do
-    raise Exception.Create('Error ao listar empresas por funcionário. ' + E.Message);
+    raise Exception.Create('Error ao listar vínculos por funcionário. ' + E.Message);
   end;
 end;
 
@@ -118,19 +130,24 @@ begin
   Result := Self;
 
   try
-    FSQLQryVinculo.Close;
+    FSQLQryVinculo.Active := False;
     FSQLQryVinculo.SQL.Clear;
-    FSQLQryVinculo.SQL.Add('SELECT v.id_empresa, e.razao_social,');
-    FSQLQryVinculo.SQL.Add('       v.id_cargo, c.descricao AS cargo, ');
-    FSQLQryVinculo.SQL.Add('       v.data_admissao');
-    FSQLQryVinculo.SQL.Add('  FROM vinculo v');
-    FSQLQryVinculo.SQL.Add(' INNER JOIN pjuridica pj ON v.id_empresa = pj.id');
-    FSQLQryVinculo.SQL.Add(' INNER JOIN pfisica pf ON v.id_funcionario = pf.id');
-    FSQLQryVinculo.SQL.Add(' WHERE v.id_empresa = :idEmpresa');
-    FSQLQryVinculo.SQL.Add('   AND v.id_funcionario = :idFuncionario');
-    FSQLQryVinculo.ParamByName('idEmpresa').AsInteger := AVinculo.IdEmpresa;
+    FSQLQryVinculo.SQL.Add('SELECT DISTINCT ');
+    FSQLQryVinculo.SQL.Add('       v.id_funcionario, ');
+    FSQLQryVinculo.SQL.Add('       v.id_cargo, ');
+    FSQLQryVinculo.SQL.Add('       v.id_empresa, ');
+    FSQLQryVinculo.SQL.Add('       v.data_admissao ');
+    FSQLQryVinculo.SQL.Add('  FROM VINCULOS v ');
+    FSQLQryVinculo.SQL.Add(' WHERE v.id_funcionario = :idFuncionario ');
+    FSQLQryVinculo.SQL.Add('   AND v.id_cargo = :idCargo ');
+    FSQLQryVinculo.SQL.Add('   AND v.id_empresa = :idEmpresa ');
+    FSQLQryVinculo.SQL.Add('   AND v.data_admissao = :dataAdmissao ');
     FSQLQryVinculo.ParamByName('idFuncionario').AsInteger := AVinculo.IdFuncionario;
-    FSQLQryVinculo.Open;
+    FSQLQryVinculo.ParamByName('idCargo').AsInteger := AVinculo.IdCargo;
+    FSQLQryVinculo.ParamByName('idEmpresa').AsInteger := AVinculo.IdEmpresa;
+    FSQLQryVinculo.ParamByName('dataAdmissao').AsDate := AVinculo.DataAdmissao;
+    FSQLQryVinculo.Active := True;
+    FCdsVinculo.Active := True;
   except on E: Exception do
     raise Exception.Create('Error ao consultar vínculo ' + E.Message);
   end;

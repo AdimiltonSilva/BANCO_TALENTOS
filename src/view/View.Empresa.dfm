@@ -5,7 +5,6 @@ inherited FrmCadastroEmpresa: TFrmCadastroEmpresa
   TextHeight = 13
   inherited pnlcontainer: TPanel
     inherited pgcMain: TPageControl
-      ActivePage = tsEdit
       inherited tsConsulta: TTabSheet
         inherited pnlMainConsultar: TPanel
           inherited pnlNavegador: TPanel
@@ -74,15 +73,7 @@ inherited FrmCadastroEmpresa: TFrmCadastroEmpresa
   end
   inherited dsConsultar: TDataSource
     OnDataChange = dsConsultarDataChange
-    Left = 552
-    Top = 240
-  end
-  object dsVinculo: TDataSource
-    Left = 552
-    Top = 296
-  end
-  object dsFuncionario: TDataSource
-    Left = 552
-    Top = 352
+    Left = 408
+    Top = 312
   end
 end

@@ -3,15 +3,17 @@ unit Dao.Funcionario;
 interface
 
 uses
-  SysUtils, SqlExpr, DB,
+  SysUtils,
+  DB, FMTBcd, SqlExpr, Provider, DBClient, DBXpress,
   UntConexao, Model.Interfaces, Dao.Interfaces;
 
 type
   TDAOFuncionario = class(TInterfacedObject, IDAOFuncionario)
     private
       FConexao: TConexao;
-      FSQLQryFuncionario: TSQLQuery;
-      FDataSource: TDataSource;
+      FSqlQryFuncionario: TSQLQuery;
+      FDspFuncionario: TDataSetProvider;
+      FCdsFuncionario: TClientDataSet;
     public
       constructor Create(var ADataSource: TDataSource);
       destructor Destroy; override;
@@ -35,13 +37,21 @@ begin
 
   FSQLQryFuncionario := TSQLQuery.Create(nil);
   FSQLQryFuncionario.SQLConnection := FConexao.GetConexao;
-  
-  FDataSource := ADataSource;
-  FDataSource.DataSet := TDataSet(FSQLQryFuncionario);
+
+  FDspFuncionario := TDataSetProvider.Create(nil);
+  FDspFuncionario.DataSet := FSqlQryFuncionario;
+
+  FCdsFuncionario := TClientDataSet.Create(nil);
+  FCdsFuncionario.SetProvider(FDspFuncionario);
+
+  ADataSource.DataSet := FCdsFuncionario;
 end;
 
 destructor TDAOFuncionario.Destroy;
 begin
+  FreeandNil(FSqlQryFuncionario);
+  FreeandNil(FDspFuncionario);
+  FreeandNil(FCdsFuncionario);
 
   inherited Destroy;
 end;
@@ -57,9 +67,9 @@ begin
 
   FSQLQryFuncionario.Close;
   FSQLQryFuncionario.SQL.Clear;
-  FSQLQryFuncionario.SQL.Add('SELECT f.id, f.nome, f.sobrenome, f.email, ');
-  FSQLQryFuncionario.SQL.Add('       f.celular, f.linkedin, f.github, f.dataadmissao ');
-  FSQLQryFuncionario.SQL.Add('  FROM funcionarios f');
+  FSQLQryFuncionario.SQL.Add('SELECT f.id, f.nome, f.sobrenome, ');
+  FSQLQryFuncionario.SQL.Add('       f.email, f.celular, f.linkedin, f.github ');
+  FSQLQryFuncionario.SQL.Add('  FROM FUNCIONARIOS f');
   FSQLQryFuncionario.SQL.Add(' WHERE f.id = :idFuncionario');
   FSQLQryFuncionario.ParamByName('idFuncionario').AsInteger := AValue;
   FSQLQryFuncionario.Open;
@@ -75,29 +85,11 @@ begin
   try
     FSQLQryFuncionario.Close;
     FSQLQryFuncionario.SQL.Clear;
-    FSQLQryFuncionario.SQL.Add('SELECT f.id, f.nome, f.sobrenome, f.email, ');
-    FSQLQryFuncionario.SQL.Add('       f.celular, f.linkedin, f.github, f.dataadmissao ');
-    FSQLQryFuncionario.SQL.Add('  FROM funcionarios f');
-    FSQLQryFuncionario.SQL.Add(' ORDER BY pf.id');
-    FSQLQryFuncionario.Open;
-  except on E: Exception do
-    raise Exception.Create('Error ao listar: ' + E.Message);
-  end;
-end;
-
-function TDAOFuncionario.ListarEmpresaPorFuncionario(AValue: Integer): IDAOFuncionario;
-begin
-  Result := Self;
-
-  try
-    FSQLQryFuncionario.Close;
-    FSQLQryFuncionario.SQL.Clear;
-    FSQLQryFuncionario.SQL.Add('SELECT e.id, e.razao_social, e.cnpj ');
-    FSQLQryFuncionario.SQL.Add('  FROM empresas e');
-    FSQLQryFuncionario.SQL.Add(' WHERE e.id = :idFuncionario');
-    FSQLQryFuncionario.ParamByName('idFuncionario').AsInteger := AValue;
-    FSQLQryFuncionario.SQL.Add(' ORDER BY e.id');
-    FSQLQryFuncionario.Open;
+    FSQLQryFuncionario.SQL.Add('SELECT f.id, f.nome, f.sobrenome, ');
+    FSQLQryFuncionario.SQL.Add('       f.email, f.celular, f.linkedin, f.github ');
+    FSQLQryFuncionario.SQL.Add('  FROM FUNCIONARIOS f');
+    FSQLQryFuncionario.SQL.Add(' ORDER BY f.id');
+    FCdsFuncionario.Open;
   except on E: Exception do
     raise Exception.Create('Error ao listar: ' + E.Message);
   end;
@@ -110,10 +102,10 @@ begin
   try
     FSQLQryFuncionario.Close;
     FSQLQryFuncionario.SQL.Clear;
-    FSQLQryFuncionario.SQL.Add('INSERT INTO funcionarios (nome, sobrenome, email, celular, ');
+    FSQLQryFuncionario.SQL.Add('INSERT INTO FUNCIONARIOS (nome, sobrenome, email, celular, ');
     FSQLQryFuncionario.SQL.Add('                         linkedin, github, dataadmissao, ');
     FSQLQryFuncionario.SQL.Add('                         idcargo, idempresa');
-    FSQLQryFuncionario.SQL.Add('                 VALUES (:nome, :SobreNome, :eMail, :celular, :LinkedIn, ');
+    FSQLQryFuncionario.SQL.Add('                  VALUES (:nome, :SobreNome, :eMail, :celular, :LinkedIn, ');
     FSQLQryFuncionario.SQL.Add('                         :GitHub, :idCargo, :idEmpresa, :dataAdmissao)');
     FSQLQryFuncionario.ParamByName('nome').AsString := AFuncionario.Nome;
     FSQLQryFuncionario.ParamByName('SobreNome').AsString := AFuncionario.SobreNome;
@@ -121,10 +113,7 @@ begin
     FSQLQryFuncionario.ParamByName('celular').AsString := AFuncionario.Celular;
     FSQLQryFuncionario.ParamByName('LinkedIn').AsString := AFuncionario.Linkedin;
     FSQLQryFuncionario.ParamByName('GitHub').AsString := AFuncionario.Github;
-    FSQLQryFuncionario.ParamByName('idCargo').AsInteger := AFuncionario.IdCargo;
-    FSQLQryFuncionario.ParamByName('idEmpresa').AsInteger := AFuncionario.IdEmpresa;
-    FSQLQryFuncionario.ParamByName('dataAdmissao').AsDate := AFuncionario.DataAdmissao;
-    FSQLQryFuncionario.ExecSQL;
+    FCdsFuncionario.Open;
   except on E: Exception do
     raise Exception.Create('Error ao inserir: ' + E.Message);
   end;
@@ -137,16 +126,13 @@ begin
   try
     FSQLQryFuncionario.Close;
     FSQLQryFuncionario.SQL.Clear;
-    FSQLQryFuncionario.SQL.Add('UPDATE funcionarios ');
+    FSQLQryFuncionario.SQL.Add('UPDATE FUNCIONARIOS ');
     FSQLQryFuncionario.SQL.Add('   SET nome = :nome, ');
     FSQLQryFuncionario.SQL.Add('       SobreNome = :SobreNome, ');
     FSQLQryFuncionario.SQL.Add('       email = :eMail, ');
     FSQLQryFuncionario.SQL.Add('       celular = :celular, ');
     FSQLQryFuncionario.SQL.Add('       linkedin = :LinkedIn, ');
-    FSQLQryFuncionario.SQL.Add('       github = :GitHub, ');
-    FSQLQryFuncionario.SQL.Add('       idcargo = :idCargo, ');
-    FSQLQryFuncionario.SQL.Add('       idempresa = :idEmpresa, ');
-    FSQLQryFuncionario.SQL.Add('       dataadmissao = :dataAdmissao ');
+    FSQLQryFuncionario.SQL.Add('       github = :GitHub ');
     FSQLQryFuncionario.SQL.Add(' WHERE id = :id');
     FSQLQryFuncionario.ParamByName('nome').AsString := AFuncionario.Nome;
     FSQLQryFuncionario.ParamByName('SobreNome').AsString := AFuncionario.SobreNome;
@@ -154,11 +140,8 @@ begin
     FSQLQryFuncionario.ParamByName('celular').AsString := AFuncionario.SobreNome;
     FSQLQryFuncionario.ParamByName('LinkedIn').AsString := AFuncionario.SobreNome;
     FSQLQryFuncionario.ParamByName('GitHub').AsString := AFuncionario.SobreNome;
-    FSQLQryFuncionario.ParamByName('SobreNome').AsString := AFuncionario.SobreNome;
     FSQLQryFuncionario.ParamByName('id').AsInteger := AFuncionario.Id;
-    FSQLQryFuncionario.ParamByName('id').AsInteger := AFuncionario.Id;
-    FSQLQryFuncionario.ParamByName('id').AsInteger := AFuncionario.Id;
-    FSQLQryFuncionario.ExecSQL;
+    FCdsFuncionario.Open;
   except on E: Exception do
     raise Exception.Create('Error ao alterar: ' + E.Message);
   end;
@@ -171,12 +154,35 @@ begin
   try
     FSQLQryFuncionario.Close;
     FSQLQryFuncionario.SQL.Clear;
-    FSQLQryFuncionario.SQL.Add('DELETE FROM funcionarios');
+    FSQLQryFuncionario.SQL.Add('DELETE FROM FUNCIONARIOS');
     FSQLQryFuncionario.SQL.Add(' WHERE id = :id');
     FSQLQryFuncionario.ParamByName('id').AsInteger := AValue;
-    FSQLQryFuncionario.ExecSQL;
+    FCdsFuncionario.Open;
   except on E: Exception do
     raise Exception.Create('Error ao excluir: ' + E.Message);
+  end;
+end;
+
+function TDAOFuncionario.ListarEmpresaPorFuncionario(AValue: Integer): IDAOFuncionario;
+begin
+  Result := Self;
+
+  try
+    FSQLQryFuncionario.Close;
+    FSQLQryFuncionario.SQL.Clear;
+    FSQLQryFuncionario.SQL.Add('SELECT DISTINCT ');
+    FSQLQryFuncionario.SQL.Add('       v.id_cargo, c.descricao, ');
+    FSQLQryFuncionario.SQL.Add('       v.id_empresa, e.razao_social, ');
+    FSQLQryFuncionario.SQL.Add('       v.data_admissao ');
+    FSQLQryFuncionario.SQL.Add('  FROM vinculos v ');
+    FSQLQryFuncionario.SQL.Add(' INNER JOIN cargos c on c.id = v.id_cargo ');
+    FSQLQryFuncionario.SQL.Add(' INNER JOIN empresas e on e.id = v.id_empresa ');
+    FSQLQryFuncionario.SQL.Add(' WHERE v.id_funcionario = :idFuncionario');
+    FSQLQryFuncionario.SQL.Add(' ORDER BY v.id_funcionario ASC, v.data_admissao DESC');
+    FSQLQryFuncionario.ParamByName('idFuncionario').AsInteger := AValue;
+    FCdsFuncionario.Open;
+  except on E: Exception do
+    raise Exception.Create('Error ao listar vínculos: ' + E.Message);
   end;
 end;
 

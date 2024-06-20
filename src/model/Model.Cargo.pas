@@ -12,9 +12,9 @@ type
       FDescricao: string;
       FDAOCargo : IDAOCargo;
     public
-      constructor Create(ADataSource: TDataSource);
+      constructor Create(var ADataSource: TDataSource);
       destructor Destroy; override;
-      class function New(ADataSource: TDataSource): IModelCargo;
+      class function New(var ADataSource: TDataSource): IModelCargo;
 
       function Id(AValue: Integer): IModelCargo; overload;
       function Id: integer; overload;
@@ -32,7 +32,7 @@ implementation
 
 { TModelCargo }
 
-constructor TModelCargo.Create(ADataSource: TDataSource);
+constructor TModelCargo.Create(var ADataSource: TDataSource);
 begin
   FDAOCargo := TDAOCargo.New(ADataSource);
 end;
@@ -42,7 +42,7 @@ begin
   inherited Destroy;
 end;
 
-class function TModelCargo.New(ADataSource: TDataSource): IModelCargo;
+class function TModelCargo.New(var ADataSource: TDataSource): IModelCargo;
 begin
   Result := Self.Create(ADataSource);
 end;
@@ -72,7 +72,7 @@ end;
 function TModelCargo.BuscarPorId(AValue: integer): IModelCargo;
 begin
   Result := Self;
-  FDAOCargo.Excluir(AValue);
+  FDAOCargo.BuscarPorId(AValue);
 end;
 
 function TModelCargo.ListarTodos: IModelCargo;

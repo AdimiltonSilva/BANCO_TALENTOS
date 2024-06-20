@@ -12,9 +12,9 @@ type
       FDataSource: TDataSource;
       FModelCargo: IModelCargo;
     public
-      constructor Create(ADataSource: TDataSource);
+      constructor Create(var ADataSource: TDataSource);
       destructor Destroy; override;
-      class function New(ADataSource: TDataSource): IControllerCargo;
+      class function New(var ADataSource: TDataSource): IControllerCargo;
 
       function Id(AValue: Integer): IControllerCargo; overload;
       function Id: integer; overload;
@@ -32,7 +32,7 @@ implementation
 
 { TControllerCargo }
 
-constructor TControllerCargo.Create(ADataSource: TDataSource);
+constructor TControllerCargo.Create(var ADataSource: TDataSource);
 begin
   FDataSource := ADataSource;
   FModelCargo := TModelCargo.New(FDataSource);
@@ -43,7 +43,7 @@ begin
   inherited Destroy;
 end;
 
-class function TControllerCargo.New(ADataSource: TDataSource): IControllerCargo;
+class function TControllerCargo.New(var ADataSource: TDataSource): IControllerCargo;
 begin
   Result := Self.Create(ADataSource);
 end;
