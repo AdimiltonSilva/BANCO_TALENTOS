@@ -66,12 +66,13 @@ begin
   try
     FSQLQryVinculo.Close;
     FSQLQryVinculo.SQL.Clear;
-    FSQLQryVinculo.SQL.Add('INSERT INTO VINCULOS (id_funcionario, id_idcargo, id_empresa, data_admissao)');
+    FSQLQryVinculo.SQL.Add('INSERT INTO VINCULOS (id_funcionario, id_cargo, id_empresa, data_admissao)');
     FSQLQryVinculo.SQL.Add('              VALUES (:idFuncionario, :idCargo, :idEmpresa, :dataAdmissao)');
     FSQLQryVinculo.ParamByName('idFuncionario').AsInteger := AVinculo.idFuncionario;
     FSQLQryVinculo.ParamByName('idCargo').AsInteger := AVinculo.IdCargo;
     FSQLQryVinculo.ParamByName('idEmpresa').AsInteger := AVinculo.IdEmpresa;
-    FSQLQryVinculo.ParamByName('dataAdmissao').AsDateTime := AVinculo.DataAdmissao;
+    FSQLQryVinculo.ParamByName('dataAdmissao').DataType := ftTimeStamp;
+    FSQLQryVinculo.ParamByName('dataAdmissao').Value := AVinculo.DataAdmissao;
     FCdsVinculo.Execute;
   except on E: Exception do
     raise Exception.Create('Error ao inserir. ' + E.Message);
@@ -106,7 +107,6 @@ begin
 
   try
     FSQLQryVinculo.Close;
-    FSQLQryVinculo.Active := False;
     FSQLQryVinculo.SQL.Clear;
     FSQLQryVinculo.SQL.Add('SELECT DISTINCT ');
     FSQLQryVinculo.SQL.Add('       v.id_cargo, c.descricao AS cargo, ');
@@ -118,8 +118,9 @@ begin
     FSQLQryVinculo.SQL.Add(' WHERE v.id_funcionario = :idFuncionario ');
     FSQLQryVinculo.SQL.Add(' ORDER BY v.id_funcionario ASC, v.data_admissao DESC');
     FSQLQryVinculo.ParamByName('idFuncionario').AsInteger := AValue;
-    FSQLQryVinculo.Active := True;
-    FCdsVinculo.Active := True;
+    FSQLQryVinculo.Open;
+    FCdsVinculo.Open;
+    FCdsVinculo.Refresh;
   except on E: Exception do
     raise Exception.Create('Error ao listar vínculos por funcionário. ' + E.Message);
   end;

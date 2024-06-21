@@ -299,7 +299,7 @@ inherited FrmCadastroFuncionario: TFrmCadastroFuncionario
               OnClick = btnSalvarVinculoClick
             end
           end
-          object DBGrid1: TDBGrid
+          object dbgVinculo: TDBGrid
             Left = 1
             Top = 137
             Width = 494

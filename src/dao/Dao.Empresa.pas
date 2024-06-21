@@ -63,7 +63,7 @@ end;
 
 function TDAOEmpresa.BuscarPorId(AValue: Integer): IDAOEmpresa;
 begin
-  Result := self;
+  Result := Self;
 
   try
     FSQLQryEmpresa.Active := False;
@@ -74,6 +74,7 @@ begin
     FSQLQryEmpresa.SQL.Add(' WHERE e.id = :idEmpresa');
     FSQLQryEmpresa.ParamByName('idEmpresa').AsInteger := AValue;
     FSqlQryEmpresa.Active := True;
+    FCdsEmpresa.Active := True;
   except on E: Exception do
     raise Exception.Create('Error ao consultar: ' + E.Message);
   end;

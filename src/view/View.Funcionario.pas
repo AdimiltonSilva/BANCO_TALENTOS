@@ -45,7 +45,7 @@ type
     lblDataAdmissao: TLabel;
     dtpDataAdmissao: TDateTimePicker;
     pnlNavegadorVinculo: TPanel;
-    DBGrid1: TDBGrid;
+    dbgVinculo: TDBGrid;
     DBNavigator1: TDBNavigator;
     dsVinculo: TDataSource;
     lblFuncionario: TLabel;
@@ -78,6 +78,7 @@ type
     FControllerCargo: IControllerCargo;
     FControllerEmpresa: IControllerEmpresa;
     procedure ConfigurarGrid;
+    procedure ConfigurarGridVinculo;
     procedure LimparEditsVinculo;
   public
     { Public declarations }
@@ -110,6 +111,7 @@ begin
     .ListarVinculoPorFuncionario(dsConsultar.DataSet.FieldByName('id').AsInteger);
 
   ConfigurarGrid;
+  ConfigurarGridVinculo;
 end;
 
 procedure TFrmCadastroFuncionario.ConfigurarGrid;
@@ -117,15 +119,12 @@ begin
   if not (dsConsultar.DataSet.IsEmpty) then
   begin
     dbgConsultar.Columns.Items[0].Width := 40;
-    dbgConsultar.Columns.Items[1].Width := -1;
-    dbgConsultar.Columns.Items[2].Width := -1;
-    dbgConsultar.Columns.Items[3].Width := 150;
-    {
-    dbgConsultar.Columns.Items[4].Width := 150;
-    dbgConsultar.Columns.Items[5].Width := 80;
-    dbgConsultar.Columns.Items[6].Width := 150;
-    dbgConsultar.Columns.Items[7].Width := 150;
-    }
+    dbgConsultar.Columns.Items[1].Width := 80;
+    dbgConsultar.Columns.Items[2].Width := 80;
+    dbgConsultar.Columns.Items[3].Width := 120;
+    dbgConsultar.Columns.Items[4].Width := 70;
+    dbgConsultar.Columns.Items[5].Width := 120;
+    dbgConsultar.Columns.Items[6].Width := 120;
   end;
 end;
 
@@ -141,6 +140,7 @@ begin
       .ListarTodos;
 
   ConfigurarGrid;
+  ConfigurarGridVinculo;
 end;
 
 procedure TFrmCadastroFuncionario.btnIncluirClick(Sender: TObject);
@@ -168,6 +168,7 @@ begin
       .ListarTodos;
 
     ConfigurarGrid;
+    ConfigurarGridVinculo;
   end;
 
   inherited;
@@ -199,6 +200,7 @@ begin
       .ListarTodos;
 
   ConfigurarGrid;
+  ConfigurarGridVinculo;
 
   inherited;
 end;
@@ -368,6 +370,18 @@ begin
   edtIdEmpresa.Clear;
   edtEmpresa.Clear;
   dtpDataAdmissao.Date := Now();
+end;
+
+procedure TFrmCadastroFuncionario.ConfigurarGridVinculo;
+begin
+  if not (dsVinculo.DataSet.IsEmpty) then
+  begin
+    dbgVinculo.Columns.Items[0].Width := 55;
+    dbgVinculo.Columns.Items[1].Width := 180;
+    dbgVinculo.Columns.Items[2].Width := 60;
+    dbgVinculo.Columns.Items[3].Width := 180;
+    dbgVinculo.Columns.Items[4].Width := 90;
+  end;
 end;
 
 end.
