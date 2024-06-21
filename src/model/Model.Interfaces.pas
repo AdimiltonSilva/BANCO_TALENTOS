@@ -32,6 +32,7 @@ type
     function BuscarPorId(AValue: Integer) : IModelFuncionario;
     function Alterar: IModelFuncionario;
     function Excluir(AValue: Integer): IModelFuncionario;
+    function AgruparPorFuncionario: IModelFuncionario;
   end;
 
   IModelEmpresa = interface

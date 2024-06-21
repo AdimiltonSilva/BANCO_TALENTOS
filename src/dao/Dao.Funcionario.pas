@@ -25,6 +25,7 @@ type
       function ListarEmpresaPorFuncionario(AValue: Integer): IDAOFuncionario;
       function Alterar(AFuncionario: IModelFuncionario): IDAOFuncionario;
       function Excluir(AValue: Integer): IDAOFuncionario;
+      function AgruparPorFuncionario: IDAOFuncionario;
   end;
 
 implementation
@@ -68,6 +69,7 @@ begin
   FSQLQryFuncionario.Close;
   FSQLQryFuncionario.SQL.Clear;
   FSQLQryFuncionario.SQL.Add('SELECT f.id, f.nome, f.sobrenome, ');
+  FSQLQryFuncionario.SQL.Add('       f.nome || '' '' || f.sobrenome AS funcionario, ');
   FSQLQryFuncionario.SQL.Add('       f.email, f.celular, f.linkedin, f.github ');
   FSQLQryFuncionario.SQL.Add('  FROM FUNCIONARIOS f');
   FSQLQryFuncionario.SQL.Add(' WHERE f.id = :idFuncionario');
@@ -86,6 +88,7 @@ begin
     FSQLQryFuncionario.Close;
     FSQLQryFuncionario.SQL.Clear;
     FSQLQryFuncionario.SQL.Add('SELECT f.id, f.nome, f.sobrenome, ');
+    FSQLQryFuncionario.SQL.Add('       f.nome || '' '' || f.sobrenome AS funcionario, ');
     FSQLQryFuncionario.SQL.Add('       f.email, f.celular, f.linkedin, f.github ');
     FSQLQryFuncionario.SQL.Add('  FROM FUNCIONARIOS f');
     FSQLQryFuncionario.SQL.Add(' ORDER BY f.id');
@@ -183,6 +186,29 @@ begin
     FCdsFuncionario.Open;
   except on E: Exception do
     raise Exception.Create('Error ao listar vínculos: ' + E.Message);
+  end;
+end;
+
+function TDAOFuncionario.AgruparPorFuncionario: IDAOFuncionario;
+begin
+  Result := Self;
+
+  try
+    FSQLQryFuncionario.Close;
+    FSQLQryFuncionario.SQL.Clear;
+    FSQLQryFuncionario.SQL.Add('SELECT DISTINCT f.id, ');
+    FSQLQryFuncionario.SQL.Add('       f.nome || '' '' || f.sobrenome AS nome_completo, ');
+    FSQLQryFuncionario.SQL.Add('       f.email, f.celular, f.linkedin, f.github, ');
+    FSQLQryFuncionario.SQL.Add('       e.razao_social AS empresa, ');
+    FSQLQryFuncionario.SQL.Add('       c.descricao AS cargo, v.data_admissao ');
+    FSQLQryFuncionario.SQL.Add('  FROM FUNCIONARIOS f ');
+    FSQLQryFuncionario.SQL.Add('  LEFT JOIN VINCULOS v ON v.id_funcionario = f.id ');
+    FSQLQryFuncionario.SQL.Add('  LEFT JOIN CARGOS c ON c.id = v.id_cargo ');
+    FSQLQryFuncionario.SQL.Add('  LEFT JOIN EMPRESAS e ON e.id = v.id_empresa ');
+    FSQLQryFuncionario.SQL.Add(' ORDER BY f.id ASC, v.data_admissao DESC ');
+    FCdsFuncionario.Open;
+  except on E: Exception do
+    raise Exception.Create('Error ao listar funcionários: ' + E.Message);
   end;
 end;
 

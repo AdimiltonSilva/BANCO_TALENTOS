@@ -16,14 +16,16 @@ type
     QRSysData3: TQRSysData;
     qrlTitulo: TQRLabel;
     DetailBand1: TQRBand;
-    qrdbtDocumento: TQRDBText;
-    qrdbtNome: TQRDBText;
+    qrdbtCampo1: TQRDBText;
+    qrdbtCampo2: TQRDBText;
     ColumnHeaderBand1: TQRBand;
-    qrlTipoDoc: TQRLabel;
-    QRLabel4: TQRLabel;
+    qrlColuna1: TQRLabel;
+    qrlColuna2: TQRLabel;
     SummaryBand1: TQRBand;
     QRSysData4: TQRSysData;
     qrlDev: TQRLabel;
+    qrlColuna3: TQRLabel;
+    qrdbtCampo3: TQRDBText;
     procedure QRSysData4Print(sender: TObject; var Value: string);
     procedure QRSysData3Print(sender: TObject; var Value: string);
   private

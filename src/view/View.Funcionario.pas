@@ -55,6 +55,7 @@ type
     btnSalvarVinculo: TButton;
     dsCargo: TDataSource;
     dsEmpresa: TDataSource;
+    dsListagem: TDataSource;
     procedure FormCreate(Sender: TObject);
     procedure pgcMainChange(Sender: TObject);
     procedure dsConsultarDataChange(Sender: TObject; Field: TField);
@@ -74,6 +75,7 @@ type
   private
     { Private declarations }
     FControllerFuncionario: IControllerFuncionario;
+    FControllerListagem: IControllerFuncionario;
     FControllerVinculo: IControllerVinculo;
     FControllerCargo: IControllerCargo;
     FControllerEmpresa: IControllerEmpresa;
@@ -94,7 +96,6 @@ uses
 
 {$R *.dfm}
 
-
 procedure TFrmCadastroFuncionario.FormCreate(Sender: TObject);
 begin
   inherited;
@@ -103,6 +104,7 @@ begin
   FControllerEmpresa := TControllerEmpresa.New(dsEmpresa);
   FControllerVinculo := TControllerVinculo.New(dsVinculo);
   FControllerFuncionario := TControllerFuncionario.New(dsConsultar);
+  FControllerListagem := TControllerFuncionario.New(dsListagem);
 
   FControllerFuncionario
     .ListarTodos;
@@ -119,12 +121,13 @@ begin
   if not (dsConsultar.DataSet.IsEmpty) then
   begin
     dbgConsultar.Columns.Items[0].Width := 40;
-    dbgConsultar.Columns.Items[1].Width := 80;
-    dbgConsultar.Columns.Items[2].Width := 80;
+    dbgConsultar.Columns.Items[1].Visible := False;
+    dbgConsultar.Columns.Items[2].Visible := False;
     dbgConsultar.Columns.Items[3].Width := 120;
-    dbgConsultar.Columns.Items[4].Width := 70;
-    dbgConsultar.Columns.Items[5].Width := 120;
+    dbgConsultar.Columns.Items[4].Width := 120;
+    dbgConsultar.Columns.Items[5].Width := 70;
     dbgConsultar.Columns.Items[6].Width := 120;
+    dbgConsultar.Columns.Items[7].Width := 120;
   end;
 end;
 
@@ -230,11 +233,15 @@ begin
   try
     FrmListagem.qrlTitulo.Caption := 'Listagem de Funcionários';
     FrmListagem.qrListagem.DataSet := dsConsultar.DataSet;
-    FrmListagem.qrlTipoDoc.Caption := 'SobreNome';
-    FrmListagem.qrdbtDocumento.DataSet := dsConsultar.DataSet;
-    FrmListagem.qrdbtDocumento.DataField := 'SobreNome';
-    FrmListagem.qrdbtNome.DataSet := dsConsultar.DataSet;
-    FrmListagem.qrdbtNome.DataField := 'NOME';
+    FrmListagem.qrlColuna1.Caption := 'FUNCIONÁRIO';
+    FrmListagem.qrlColuna2.Caption := 'E-MAIL';
+    FrmListagem.qrlColuna3.Caption := 'CELULAR';
+    FrmListagem.qrdbtCampo1.DataSet := dsConsultar.DataSet;
+    FrmListagem.qrdbtCampo1.DataField := 'funcionario';
+    FrmListagem.qrdbtCampo2.DataSet := dsConsultar.DataSet;
+    FrmListagem.qrdbtCampo2.DataField := 'email';
+    FrmListagem.qrdbtCampo3.DataSet := dsConsultar.DataSet;
+    FrmListagem.qrdbtCampo3.DataField := 'celular';
 
     FrmListagem.qrListagem.Preview;
   finally
@@ -378,7 +385,7 @@ begin
   begin
     dbgVinculo.Columns.Items[0].Width := 55;
     dbgVinculo.Columns.Items[1].Width := 180;
-    dbgVinculo.Columns.Items[2].Width := 60;
+    dbgVinculo.Columns.Items[2].Width := 65;
     dbgVinculo.Columns.Items[3].Width := 180;
     dbgVinculo.Columns.Items[4].Width := 90;
   end;

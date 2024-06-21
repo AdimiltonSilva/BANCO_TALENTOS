@@ -1,6 +1,6 @@
 object FrmListagem: TFrmListagem
-  Left = 425
-  Top = 127
+  Left = 421
+  Top = 170
   Width = 828
   Height = 593
   Caption = 'Listagem'
@@ -234,7 +234,7 @@ object FrmListagem: TFrmListagem
         52.916666666666670000
         1899.708333333333000000)
       BandType = rbDetail
-      object qrdbtDocumento: TQRDBText
+      object qrdbtCampo1: TQRDBText
         Left = 8
         Top = 1
         Width = 80
@@ -259,10 +259,10 @@ object FrmListagem: TFrmListagem
         WordWrap = True
         FontSize = 8
       end
-      object qrdbtNome: TQRDBText
-        Left = 100
+      object qrdbtCampo2: TQRDBText
+        Left = 200
         Top = 1
-        Width = 55
+        Width = 25
         Height = 17
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -271,15 +271,40 @@ object FrmListagem: TFrmListagem
         Frame.DrawRight = False
         Size.Values = (
           44.979166666666670000
-          264.583333333333300000
+          529.166666666666700000
           2.645833333333333000
-          145.520833333333300000)
+          66.145833333333330000)
         Alignment = taLeftJustify
         AlignToBand = False
         AutoSize = True
         AutoStretch = False
         Color = clWhite
-        DataField = 'sobrenome'
+        DataField = 'email'
+        Transparent = False
+        WordWrap = True
+        FontSize = 8
+      end
+      object qrdbtCampo3: TQRDBText
+        Left = 450
+        Top = 1
+        Width = 33
+        Height = 17
+        Frame.Color = clBlack
+        Frame.DrawTop = False
+        Frame.DrawBottom = False
+        Frame.DrawLeft = False
+        Frame.DrawRight = False
+        Size.Values = (
+          44.979166666666670000
+          1190.625000000000000000
+          2.645833333333333000
+          87.312500000000000000)
+        Alignment = taLeftJustify
+        AlignToBand = False
+        AutoSize = True
+        AutoStretch = False
+        Color = clWhite
+        DataField = 'celular'
         Transparent = False
         WordWrap = True
         FontSize = 8
@@ -309,10 +334,10 @@ object FrmListagem: TFrmListagem
         52.916666666666670000
         1899.708333333333000000)
       BandType = rbColumnHeader
-      object qrlTipoDoc: TQRLabel
+      object qrlColuna1: TQRLabel
         Left = 8
         Top = 1
-        Width = 32
+        Width = 73
         Height = 17
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -323,21 +348,21 @@ object FrmListagem: TFrmListagem
           44.979166666666670000
           21.166666666666670000
           2.645833333333333000
-          84.666666666666670000)
+          193.145833333333300000)
         Alignment = taLeftJustify
         AlignToBand = False
         AutoSize = True
         AutoStretch = False
-        Caption = 'NOME'
+        Caption = 'FUNCION'#193'RIO'
         Color = clWhite
         Transparent = False
         WordWrap = True
         FontSize = 8
       end
-      object QRLabel4: TQRLabel
-        Left = 100
+      object qrlColuna2: TQRLabel
+        Left = 200
         Top = 1
-        Width = 70
+        Width = 39
         Height = 17
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -346,14 +371,39 @@ object FrmListagem: TFrmListagem
         Frame.DrawRight = False
         Size.Values = (
           44.979166666666670000
-          264.583333333333300000
+          529.166666666666700000
           2.645833333333333000
-          185.208333333333300000)
+          103.187500000000000000)
         Alignment = taLeftJustify
         AlignToBand = False
         AutoSize = True
         AutoStretch = False
-        Caption = 'SOBRE NOME'
+        Caption = 'E-MAIL'
+        Color = clWhite
+        Transparent = False
+        WordWrap = True
+        FontSize = 8
+      end
+      object qrlColuna3: TQRLabel
+        Left = 450
+        Top = 1
+        Width = 51
+        Height = 17
+        Frame.Color = clBlack
+        Frame.DrawTop = False
+        Frame.DrawBottom = False
+        Frame.DrawLeft = False
+        Frame.DrawRight = False
+        Size.Values = (
+          44.979166666666670000
+          1190.625000000000000000
+          2.645833333333333000
+          134.937500000000000000)
+        Alignment = taLeftJustify
+        AlignToBand = False
+        AutoSize = True
+        AutoStretch = False
+        Caption = 'CELUALR'
         Color = clWhite
         Transparent = False
         WordWrap = True

@@ -128,9 +128,6 @@ begin
       .Alterar
       .ListarTodos;
 
-//  FControllerEmpresa
-//    .ListarTodos;
-
   ConfigurarGrid;
 
   inherited;
@@ -155,11 +152,9 @@ begin
   try
     FrmListagem.qrlTitulo.Caption := 'Listagem de Pessoas Jur�dicas';
     FrmListagem.qrListagem.DataSet := dsConsultar.DataSet;
-    FrmListagem.qrlTipoDoc.Caption := 'CNPJ';
-    FrmListagem.qrdbtDocumento.DataSet := dsConsultar.DataSet;
-    FrmListagem.qrdbtDocumento.DataField := 'CNPJ';
-    FrmListagem.qrdbtNome.DataSet := dsConsultar.DataSet;
-    FrmListagem.qrdbtNome.DataField := 'NOME';
+    FrmListagem.qrlColuna1.Caption := 'CNPJ';
+    FrmListagem.qrdbtCampo1.DataField := 'CNPJ';
+    FrmListagem.qrdbtCampo2.DataField := 'NOME';
 
     FrmListagem.qrListagem.Preview;
   finally

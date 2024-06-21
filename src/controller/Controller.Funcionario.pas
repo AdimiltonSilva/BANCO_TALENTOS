@@ -41,6 +41,7 @@ type
       function Salvar: IControllerFuncionario;
       function Alterar: IControllerFuncionario;
       function Excluir(AValue: Integer): IControllerFuncionario;
+      function AgruparPorFuncionario: IControllerFuncionario;
   end;
 
 implementation
@@ -209,6 +210,12 @@ function TControllerFuncionario.Salvar: IControllerFuncionario;
 begin
   Result := Self;
   FModelFuncionario.Salvar;
+end;
+
+function TControllerFuncionario.AgruparPorFuncionario: IControllerFuncionario;
+begin
+  Result := Self;
+  FModelFuncionario.AgruparPorFuncionario;
 end;
 
 end.

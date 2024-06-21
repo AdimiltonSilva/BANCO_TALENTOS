@@ -22,10 +22,10 @@ type
 
     function BuscaPorId(AId: Integer): IControllerFuncionario;
     function ListarTodos: IControllerFuncionario;
-    //function ListarEmpresaPorFuncionario(AValue: Integer): IControllerFuncionario;
     function Salvar: IControllerFuncionario;
     function Alterar: IConTrollerFuncionario;
     function Excluir(AValue: Integer): IControllerFuncionario;
+    function AgruparPorFuncionario: IControllerFuncionario;
   end;
 
   IControllerEmpresa = interface

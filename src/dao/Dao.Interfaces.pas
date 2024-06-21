@@ -13,6 +13,7 @@ type
     function ListarTodos: IDAOFuncionario;
     function Alterar(AFuncionario: IModelFuncionario): IDAOFuncionario;
     function Excluir(AValue: Integer): IDAOFuncionario;
+    function AgruparPorFuncionario: IDAOFuncionario;
   end;
 
   IDAOEmpresa = interface

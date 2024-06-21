@@ -5,7 +5,6 @@ inherited FrmCadastroFuncionario: TFrmCadastroFuncionario
   TextHeight = 13
   inherited pnlcontainer: TPanel
     inherited pgcMain: TPageControl
-      ActivePage = tsVinculo
       inherited tsConsulta: TTabSheet
         inherited pnlMainConsultar: TPanel
           inherited pnlPesquisar: TPanel
@@ -342,5 +341,9 @@ inherited FrmCadastroFuncionario: TFrmCadastroFuncionario
   object dsEmpresa: TDataSource
     Left = 436
     Top = 291
+  end
+  object dsListagem: TDataSource
+    Left = 436
+    Top = 139
   end
 end

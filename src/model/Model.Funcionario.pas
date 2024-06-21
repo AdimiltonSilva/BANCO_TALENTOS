@@ -48,9 +48,11 @@ type
 
       function Salvar: IModelFuncionario;
       function ListarTodos: IModelFuncionario;
+      //function ListarEmpresaPorFuncionario(AValue: Integer): IModelFuncionario;
       function BuscarPorId(AValue: Integer): IModelFuncionario;
       function Alterar: IModelFuncionario;
       function Excluir(AValue: Integer): IModelFuncionario;
+      function AgruparPorFuncionario: IModelFuncionario;
   end;
 
 implementation
@@ -212,6 +214,12 @@ function TModelFuncionario.Salvar: IModelFuncionario;
 begin
   Result := Self;
   FDAOFuncionario.Salvar(Self);
+end;
+
+function TModelFuncionario.AgruparPorFuncionario: IModelFuncionario;
+begin
+  Result := Self;
+  FDAOFuncionario.AgruparPorFuncionario;
 end;
 
 end.
