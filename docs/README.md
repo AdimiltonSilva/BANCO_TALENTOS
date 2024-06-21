@@ -30,7 +30,7 @@ https://www.linkedin.com/in/adimilton-antonio-89553522/
     - Adicionar uma nova empresa.
     - Editar uma empresa existente.
     - Excluir um empresa.
-    - Listar todos as empresas.
+    - Listar todas as empresas.
 
 3. **Cadastro de Funcionários**:
     - Deve conter os seguintes dados:
@@ -38,32 +38,20 @@ https://www.linkedin.com/in/adimilton-antonio-89553522/
     - Adicionar um novo funcionário.
     - Editar um funcionário existente.
     - Excluir um funcionário.
-    - Listar todos os funcionários.
-    - Listar todos os funcionários por empresa.
-    - Associar um funcionário a uma empresa (Vinculo).
+    - Associar um funcionário a uma empresa (Vínculo).
+    - Listar todos os funcionários agrupados por empresa.
 
 4. **Vínculo de Funcionários a um Cargo e Empresa**:
     - Deve conter os seguintes dados:
       (IdFuncionario, IdCargo, IdEmpresa, DataAdmissao)
-    - Adicionar um novo vínculo "Associar um funcionário a uma empresa (Vinculo)".
-    - Editar um vínculo existente.
-    - Excluir um vínculo.
-    - Listar todos os vínculo.
-    - Listar todos os funcionários por empresa.
-
-5. **Visualização**:
-    - Visualizar a lista de cargos.
-    - Visualizar a lista de funcionários.
-    - Visualizar a lista de funcionários e empresas vinculadas.
-    - Visualizar a lista de empresas.
-    - Visualizar a lista de empresas e funcionários vinculados.
+    - Adicionar um novo vínculo "Associar um funcionário a uma Empresa/Cargo/DataAdmissão".
 
 ### Requisitos Técnicos
 
 - O projeto deve ser desenvolvido em Delphi 7.
 - Utilizar um banco de dados relacional (Firebird).
 - Interface gráfica deve ser desenvolvida utilizando os componentes padrão do Delphi.
-- Implementar todas as operações CRUD para Cargos, Funcionários e Empresas.
+- Implementar todas as operações CRUD para Empresas, Cargos, Funcionários(+Vículo).
 
 ## Estrutura do Projeto
 
@@ -82,11 +70,12 @@ A estrutura sugerida para o projeto é a seguinte: <br/>
 │   |   ├── Dao.Empresa.pas
 │   |   ├── Dao.Funcionario.pas
 │   |   └── Dao.Cargo.pas
+│   |   └── Dao.Vinculo.pas
 │   ├── /model # Pasta para arquivos de modelo 
 │   |   ├── Model.Interfaces.pas
-│   |   ├── Model.Pessoa.pas
 │   |   ├── Model.Empresa.pas
 │   |   ├── Model.Funcionario.pas
+│   |   ├── Model.Vinculo.pas
 │   |   └── Model.Cargo.pas
 │   ├── /view # Pasta para arquivos de interface com o usuário 
 │   |   ├── View.Principal.dfm 
@@ -99,22 +88,22 @@ A estrutura sugerida para o projeto é a seguinte: <br/>
 │   |   ├── View.Funcionario.pas
 │   |   ├── View.Cargo.dfm
 │   |   ├── View.Cargo.pas
-│   |   ├── View.ListagemEmpresa.dfm
-│   |   ├── View.ListagemEmpresa.pas
-│   |   ├── View.ListagemFuncionario.dfm
-│   |   ├── View.ListagemFuncionario.pas
-│   |   ├── View.ListagemCargo.dfm
-│   |   └── View.ListagemCargo.pas
+│   |   ├── View.Listagem.dfm
+│   |   ├── View.Listagem.pas
+│   |   ├── View.Pesquisa.dfm
+│   |   ├── View.Pesquisa.pas
 │   └── /controller # Pasta para arquivos do controlador 
 │       ├── Controller.Interfaces.pas
 │       ├── Controller.Empresa.pas
 │       ├── Controller.Funcionario.pas
-│       └── Controller.Cargo.pas
+│       ├── Controller.Cargo.pas
+│       └── Controller.Vinculo.pas
 ├── /docs # Documentação do projeto 
 │   ├── LICENSE
 │   ├── AVALIACAO.md
 │   └── README.md # Este arquivo 
-└── /sql # Scripts SQL para criação do banco de dados 
+└── /db # Scripts SQL para criação do banco de dados e o Banco de Dados
+│   ├── TESTE.FDB 
     └── create_database.sql 
 ```
 ## Licença
