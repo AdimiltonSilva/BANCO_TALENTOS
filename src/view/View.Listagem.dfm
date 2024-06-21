@@ -210,9 +210,9 @@ object FrmListagem: TFrmListagem
         FontSize = 10
       end
     end
-    object DetailBand1: TQRBand
+    object qrbDetalhe: TQRBand
       Left = 38
-      Top = 133
+      Top = 153
       Width = 718
       Height = 20
       Frame.Color = clBlack
@@ -222,6 +222,7 @@ object FrmListagem: TFrmListagem
       Frame.DrawRight = False
       AlignToBottom = False
       Color = clWhite
+      Enabled = False
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -234,10 +235,10 @@ object FrmListagem: TFrmListagem
         52.916666666666670000
         1899.708333333333000000)
       BandType = rbDetail
-      object qrdbtCampo1: TQRDBText
-        Left = 8
+      object qrdbCargo: TQRDBText
+        Left = 50
         Top = 1
-        Width = 80
+        Width = 27
         Height = 17
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -246,21 +247,27 @@ object FrmListagem: TFrmListagem
         Frame.DrawRight = False
         Size.Values = (
           44.979166666666670000
-          21.166666666666670000
+          132.291666666666700000
           2.645833333333333000
-          211.666666666666700000)
+          71.437500000000000000)
         Alignment = taLeftJustify
         AlignToBand = False
-        AutoSize = False
+        AutoSize = True
         AutoStretch = False
         Color = clWhite
         DataField = 'nome'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
         Transparent = False
         WordWrap = True
         FontSize = 8
       end
-      object qrdbtCampo2: TQRDBText
-        Left = 200
+      object qrdbData: TQRDBText
+        Left = 300
         Top = 1
         Width = 25
         Height = 17
@@ -271,7 +278,7 @@ object FrmListagem: TFrmListagem
         Frame.DrawRight = False
         Size.Values = (
           44.979166666666670000
-          529.166666666666700000
+          793.750000000000000000
           2.645833333333333000
           66.145833333333330000)
         Alignment = taLeftJustify
@@ -280,11 +287,17 @@ object FrmListagem: TFrmListagem
         AutoStretch = False
         Color = clWhite
         DataField = 'email'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
         Transparent = False
         WordWrap = True
         FontSize = 8
       end
-      object qrdbtCampo3: TQRDBText
+      object qrdbEmpresa: TQRDBText
         Left = 450
         Top = 1
         Width = 33
@@ -305,6 +318,12 @@ object FrmListagem: TFrmListagem
         AutoStretch = False
         Color = clWhite
         DataField = 'celular'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
         Transparent = False
         WordWrap = True
         FontSize = 8
@@ -412,7 +431,7 @@ object FrmListagem: TFrmListagem
     end
     object SummaryBand1: TQRBand
       Left = 38
-      Top = 153
+      Top = 183
       Width = 718
       Height = 20
       Frame.Color = clBlack
@@ -491,6 +510,142 @@ object FrmListagem: TFrmListagem
         WordWrap = True
         FontSize = 7
       end
+    end
+    object qrgFuncionario: TQRGroup
+      Left = 38
+      Top = 133
+      Width = 718
+      Height = 20
+      Frame.Color = clBlack
+      Frame.DrawTop = False
+      Frame.DrawBottom = False
+      Frame.DrawLeft = False
+      Frame.DrawRight = False
+      AlignToBottom = False
+      Color = clWhite
+      ForceNewColumn = False
+      ForceNewPage = False
+      LinkBand = qrbDetalhe
+      Size.Values = (
+        52.916666666666670000
+        1899.708333333333000000)
+      Expression = 'ID'
+      FooterBand = qrbFootGroup
+      Master = qrListagem
+      ReprintOnNewPage = False
+      object qrdbtCampo1: TQRDBText
+        Left = 8
+        Top = 1
+        Width = 27
+        Height = 17
+        Frame.Color = clBlack
+        Frame.DrawTop = False
+        Frame.DrawBottom = False
+        Frame.DrawLeft = False
+        Frame.DrawRight = False
+        Size.Values = (
+          44.979166666666670000
+          21.166666666666670000
+          2.645833333333333000
+          71.437500000000000000)
+        Alignment = taLeftJustify
+        AlignToBand = False
+        AutoSize = True
+        AutoStretch = False
+        Color = clWhite
+        DataField = 'nome'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        WordWrap = True
+        FontSize = 8
+      end
+      object qrdbtCampo2: TQRDBText
+        Left = 200
+        Top = 1
+        Width = 25
+        Height = 17
+        Frame.Color = clBlack
+        Frame.DrawTop = False
+        Frame.DrawBottom = False
+        Frame.DrawLeft = False
+        Frame.DrawRight = False
+        Size.Values = (
+          44.979166666666670000
+          529.166666666666700000
+          2.645833333333333000
+          66.145833333333330000)
+        Alignment = taLeftJustify
+        AlignToBand = False
+        AutoSize = True
+        AutoStretch = False
+        Color = clWhite
+        DataField = 'email'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        WordWrap = True
+        FontSize = 8
+      end
+      object qrdbtCampo3: TQRDBText
+        Left = 450
+        Top = 1
+        Width = 33
+        Height = 17
+        Frame.Color = clBlack
+        Frame.DrawTop = False
+        Frame.DrawBottom = False
+        Frame.DrawLeft = False
+        Frame.DrawRight = False
+        Size.Values = (
+          44.979166666666670000
+          1190.625000000000000000
+          2.645833333333333000
+          87.312500000000000000)
+        Alignment = taLeftJustify
+        AlignToBand = False
+        AutoSize = True
+        AutoStretch = False
+        Color = clWhite
+        DataField = 'celular'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        WordWrap = True
+        FontSize = 8
+      end
+    end
+    object qrbFootGroup: TQRBand
+      Left = 38
+      Top = 173
+      Width = 718
+      Height = 10
+      Frame.Color = clBlack
+      Frame.DrawTop = True
+      Frame.DrawBottom = False
+      Frame.DrawLeft = False
+      Frame.DrawRight = False
+      AlignToBottom = False
+      Color = clWhite
+      Enabled = False
+      ForceNewColumn = False
+      ForceNewPage = False
+      Size.Values = (
+        26.458333333333330000
+        1899.708333333333000000)
+      BandType = rbGroupFooter
     end
   end
 end

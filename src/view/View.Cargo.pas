@@ -20,6 +20,7 @@ type
     procedure btnExcluirClick(Sender: TObject);
     procedure btnSalvarClick(Sender: TObject);
     procedure dsConsultarDataChange(Sender: TObject; Field: TField);
+    procedure btnImprimirClick(Sender: TObject);
   private
     { Private declarations }
     FControllerCargo: IControllerCargo;
@@ -32,6 +33,8 @@ var
   FrmCadastroCargo: TFrmCadastroCargo;
 
 implementation
+
+uses View.Listagem;
 
 {$R *.dfm}
 
@@ -111,6 +114,32 @@ begin
 
   edtId.Text := dsConsultar.DataSet.FieldByName('id').AsString;
   edtDescricao.Text := dsConsultar.DataSet.FieldByName('descricao').AsString;
+end;
+
+procedure TFrmCadastroCargo.btnImprimirClick(Sender: TObject);
+var
+  FrmListagem: TFrmListagem;
+begin
+  FrmListagem := TFrmListagem.Create(nil);
+
+  try
+    FrmListagem.qrlTitulo.Caption := 'Listagem de Cargos';
+    FrmListagem.qrListagem.DataSet := dsConsultar.DataSet;
+    FrmListagem.qrlColuna1.Caption := 'DESCRIÇÃO';
+    FrmListagem.qrlColuna2.Caption := '';
+    FrmListagem.qrlColuna3.Caption := '';
+
+    FrmListagem.qrdbtCampo1.DataField := 'DESCRICAO';
+    FrmListagem.qrdbtCampo1.DataSet := dsConsultar.DataSet;
+
+    FrmListagem.qrbDetalhe.Enabled := False;
+    FrmListagem.qrbFootGroup.Enabled := False;
+
+    FrmListagem.qrListagem.Preview;
+  finally
+    if FrmListagem <> nil then
+      FreeAndNil(FrmListagem);
+  end;
 end;
 
 end.

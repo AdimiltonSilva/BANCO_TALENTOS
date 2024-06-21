@@ -15,9 +15,7 @@ type
     QRSysData2: TQRSysData;
     QRSysData3: TQRSysData;
     qrlTitulo: TQRLabel;
-    DetailBand1: TQRBand;
-    qrdbtCampo1: TQRDBText;
-    qrdbtCampo2: TQRDBText;
+    qrbDetalhe: TQRBand;
     ColumnHeaderBand1: TQRBand;
     qrlColuna1: TQRLabel;
     qrlColuna2: TQRLabel;
@@ -25,7 +23,14 @@ type
     QRSysData4: TQRSysData;
     qrlDev: TQRLabel;
     qrlColuna3: TQRLabel;
+    qrgFuncionario: TQRGroup;
+    qrdbtCampo1: TQRDBText;
+    qrdbtCampo2: TQRDBText;
     qrdbtCampo3: TQRDBText;
+    qrdbCargo: TQRDBText;
+    qrdbData: TQRDBText;
+    qrdbEmpresa: TQRDBText;
+    qrbFootGroup: TQRBand;
     procedure QRSysData4Print(sender: TObject; var Value: string);
     procedure QRSysData3Print(sender: TObject; var Value: string);
   private

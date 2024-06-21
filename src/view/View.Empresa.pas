@@ -150,11 +150,19 @@ begin
   FrmListagem := TFrmListagem.Create(nil);
 
   try
-    FrmListagem.qrlTitulo.Caption := 'Listagem de Pessoas Jur�dicas';
+    FrmListagem.qrlTitulo.Caption := 'Listagem de Empresas';
     FrmListagem.qrListagem.DataSet := dsConsultar.DataSet;
     FrmListagem.qrlColuna1.Caption := 'CNPJ';
+    FrmListagem.qrlColuna2.Caption := 'EMPRESA';
+    FrmListagem.qrlColuna3.Caption := '';
+
     FrmListagem.qrdbtCampo1.DataField := 'CNPJ';
-    FrmListagem.qrdbtCampo2.DataField := 'NOME';
+    FrmListagem.qrdbtCampo1.DataSet := dsConsultar.DataSet;
+    FrmListagem.qrdbtCampo2.DataField := 'RAZAO_SOCIAL';
+    FrmListagem.qrdbtCampo2.DataSet := dsConsultar.DataSet;
+
+    FrmListagem.qrbDetalhe.Enabled := False;
+    FrmListagem.qrbFootGroup.Enabled := False;
 
     FrmListagem.qrListagem.Preview;
   finally

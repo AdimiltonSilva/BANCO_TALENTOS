@@ -102,7 +102,7 @@ begin
   Result := Self;
 
   try
-    FSQLQryEmpresa.Close;
+    FSqlQryEmpresa.Active := False;
     FSQLQryEmpresa.SQL.Clear;
     FSQLQryEmpresa.SQL.Add('INSERT INTO EMPRESAS (razao_social, cnpj) ');
     FSQLQryEmpresa.SQL.Add('     VALUES (:razao_social, :cnpj)');
@@ -119,7 +119,7 @@ begin
   Result := Self;
 
   try
-    FSQLQryEmpresa.Close;
+    FSqlQryEmpresa.Close;
     FSQLQryEmpresa.SQL.Clear;
     FSQLQryEmpresa.SQL.Add('UPDATE EMPRESAS');
     FSQLQryEmpresa.SQL.Add('   SET razao_social = :razaoSocial,');
@@ -128,7 +128,8 @@ begin
     FSQLQryEmpresa.ParamByName('razaoSocial').AsString := AEmpresa.RazaoSocial;
     FSQLQryEmpresa.ParamByName('cnpj').AsString := AEmpresa.CNPJ;
     FSQLQryEmpresa.ParamByName('idEmpresa').AsInteger := AEmpresa.Id;
-    FSqlQryEmpresa.ExecSql;
+    FSqlQryEmpresa.ExecSQL;
+    FCdsEmpresa.Execute;
   except on E: Exception do
     raise Exception.Create('Error ao atualizar: ' + E.Message);
   end;
@@ -139,11 +140,12 @@ begin
   Result := Self;
 
   try
-    FSQLQryEmpresa.Close;
+    FSqlQryEmpresa.Active := True;
     FSQLQryEmpresa.SQL.Clear;
     FSQLQryEmpresa.SQL.Add('DELETE FROM EMPRESAS');
     FSQLQryEmpresa.SQL.Add(' WHERE id = :idEmpresa');
     FSQLQryEmpresa.ParamByName('idEmpresa').AsInteger := AValue;
+    FSqlQryEmpresa.ExecSQL;
     FCdsEmpresa.Execute;
   except on E: Exception do
     raise Exception.Create('Error ao excluir: ' + E.Message);

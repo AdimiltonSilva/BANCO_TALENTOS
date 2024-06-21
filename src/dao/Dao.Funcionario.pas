@@ -106,17 +106,16 @@ begin
     FSQLQryFuncionario.Close;
     FSQLQryFuncionario.SQL.Clear;
     FSQLQryFuncionario.SQL.Add('INSERT INTO FUNCIONARIOS (nome, sobrenome, email, celular, ');
-    FSQLQryFuncionario.SQL.Add('                         linkedin, github, dataadmissao, ');
-    FSQLQryFuncionario.SQL.Add('                         idcargo, idempresa');
+    FSQLQryFuncionario.SQL.Add('                          linkedin, github)');
     FSQLQryFuncionario.SQL.Add('                  VALUES (:nome, :SobreNome, :eMail, :celular, :LinkedIn, ');
-    FSQLQryFuncionario.SQL.Add('                         :GitHub, :idCargo, :idEmpresa, :dataAdmissao)');
+    FSQLQryFuncionario.SQL.Add('                         :GitHub)');
     FSQLQryFuncionario.ParamByName('nome').AsString := AFuncionario.Nome;
     FSQLQryFuncionario.ParamByName('SobreNome').AsString := AFuncionario.SobreNome;
-    FSQLQryFuncionario.ParamByName('eMail').AsString := AFuncionario.SobreNome;
+    FSQLQryFuncionario.ParamByName('eMail').AsString := AFuncionario.EMail;
     FSQLQryFuncionario.ParamByName('celular').AsString := AFuncionario.Celular;
     FSQLQryFuncionario.ParamByName('LinkedIn').AsString := AFuncionario.Linkedin;
     FSQLQryFuncionario.ParamByName('GitHub').AsString := AFuncionario.Github;
-    FCdsFuncionario.Open;
+    FCdsFuncionario.Execute;
   except on E: Exception do
     raise Exception.Create('Error ao inserir: ' + E.Message);
   end;
@@ -139,12 +138,12 @@ begin
     FSQLQryFuncionario.SQL.Add(' WHERE id = :id');
     FSQLQryFuncionario.ParamByName('nome').AsString := AFuncionario.Nome;
     FSQLQryFuncionario.ParamByName('SobreNome').AsString := AFuncionario.SobreNome;
-    FSQLQryFuncionario.ParamByName('eMail').AsString := AFuncionario.SobreNome;
-    FSQLQryFuncionario.ParamByName('celular').AsString := AFuncionario.SobreNome;
-    FSQLQryFuncionario.ParamByName('LinkedIn').AsString := AFuncionario.SobreNome;
-    FSQLQryFuncionario.ParamByName('GitHub').AsString := AFuncionario.SobreNome;
+    FSQLQryFuncionario.ParamByName('eMail').AsString := AFuncionario.EMail;
+    FSQLQryFuncionario.ParamByName('celular').AsString := AFuncionario.Celular;
+    FSQLQryFuncionario.ParamByName('LinkedIn').AsString := AFuncionario.Linkedin;
+    FSQLQryFuncionario.ParamByName('GitHub').AsString := AFuncionario.Github;
     FSQLQryFuncionario.ParamByName('id').AsInteger := AFuncionario.Id;
-    FCdsFuncionario.Open;
+    FCdsFuncionario.Execute;
   except on E: Exception do
     raise Exception.Create('Error ao alterar: ' + E.Message);
   end;
@@ -160,7 +159,7 @@ begin
     FSQLQryFuncionario.SQL.Add('DELETE FROM FUNCIONARIOS');
     FSQLQryFuncionario.SQL.Add(' WHERE id = :id');
     FSQLQryFuncionario.ParamByName('id').AsInteger := AValue;
-    FCdsFuncionario.Open;
+    FCdsFuncionario.Execute;
   except on E: Exception do
     raise Exception.Create('Error ao excluir: ' + E.Message);
   end;

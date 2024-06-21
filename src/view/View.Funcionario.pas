@@ -214,11 +214,15 @@ begin
 
   edtId.Text   := dsConsultar.DataSet.FieldByName('id').AsString;
   edtNome.Text := dsConsultar.DataSet.FieldByName('nome').AsString;
-  edtSobreNome.Text  := dsConsultar.DataSet.FieldByName('SobreNome').AsString;
+  edtSobreNome.Text  := dsConsultar.DataSet.FieldByName('sobrenome').AsString;
+  edtEmail.Text  := dsConsultar.DataSet.FieldByName('email').AsString;
+  edtCelular.Text  := dsConsultar.DataSet.FieldByName('celular').AsString;
+  edtLinkedIn.Text  := dsConsultar.DataSet.FieldByName('linkedin').AsString;
+  edtgitHub.Text  := dsConsultar.DataSet.FieldByName('github').AsString;
 
   edtIdFuncionario.Text := dsConsultar.DataSet.FieldByName('id').AsString;
   edtNomeCompleto.Text := dsConsultar.DataSet.FieldByName('nome').AsString + ' ' +
-                          dsConsultar.DataSet.FieldByName('SobreNome').AsString;
+                          dsConsultar.DataSet.FieldByName('sobrenome').AsString;
 
   FControllerVinculo
     .ListarVinculoPorFuncionario(StrToInt(edtId.Text));
@@ -228,20 +232,34 @@ procedure TFrmCadastroFuncionario.btnImprimirClick(Sender: TObject);
 var
   FrmListagem: TFrmListagem;
 begin
+  FControllerListagem
+    .AgruparPorFuncionario;
+
   FrmListagem := TFrmListagem.Create(nil);
 
   try
     FrmListagem.qrlTitulo.Caption := 'Listagem de Funcionários';
-    FrmListagem.qrListagem.DataSet := dsConsultar.DataSet;
+    FrmListagem.qrListagem.DataSet := dsListagem.DataSet;
     FrmListagem.qrlColuna1.Caption := 'FUNCIONÁRIO';
-    FrmListagem.qrlColuna2.Caption := 'E-MAIL';
-    FrmListagem.qrlColuna3.Caption := 'CELULAR';
-    FrmListagem.qrdbtCampo1.DataSet := dsConsultar.DataSet;
-    FrmListagem.qrdbtCampo1.DataField := 'funcionario';
-    FrmListagem.qrdbtCampo2.DataSet := dsConsultar.DataSet;
+    FrmListagem.qrlColuna2.Caption := '';
+    FrmListagem.qrlColuna3.Caption := '';
+
+    FrmListagem.qrdbtCampo1.DataSet := dsListagem.DataSet;
+    FrmListagem.qrdbtCampo1.DataField := 'nome_completo';
+    FrmListagem.qrdbtCampo2.DataSet := dsListagem.DataSet;
     FrmListagem.qrdbtCampo2.DataField := 'email';
-    FrmListagem.qrdbtCampo3.DataSet := dsConsultar.DataSet;
+    FrmListagem.qrdbtCampo3.DataSet := dsListagem.DataSet;
     FrmListagem.qrdbtCampo3.DataField := 'celular';
+
+    FrmListagem.qrdbCargo.DataSet := dsListagem.DataSet;
+    FrmListagem.qrdbCargo.DataField := 'cargo';
+    FrmListagem.qrdbData.DataSet := dsListagem.DataSet;
+    FrmListagem.qrdbData.DataField := 'data_admissao';
+    FrmListagem.qrdbEmpresa.DataSet := dsListagem.DataSet;
+    FrmListagem.qrdbEmpresa.DataField := 'empresa';
+
+    FrmListagem.qrbDetalhe.Enabled := True;
+    FrmListagem.qrbFootGroup.Enabled := True;
 
     FrmListagem.qrListagem.Preview;
   finally

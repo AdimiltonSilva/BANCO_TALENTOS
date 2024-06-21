@@ -5,6 +5,7 @@ inherited FrmCadastroFuncionario: TFrmCadastroFuncionario
   TextHeight = 13
   inherited pnlcontainer: TPanel
     inherited pgcMain: TPageControl
+      ActivePage = tsEdit
       inherited tsConsulta: TTabSheet
         inherited pnlMainConsultar: TPanel
           inherited pnlPesquisar: TPanel
